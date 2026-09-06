@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Протокол сна - дело не в силе воли. Вот почему.</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Geologica:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+ :root {
+ --bg: #f7f5f0;
+ --bg-card: #ffffff;
+ --bg-section: #f0ece3;
+ --text: #2C2C2A;
+ --text-muted: #5F5E5A;
+ --text-light: #888780;
+ --amber: #854F0B;
+ --amber-light: #FAEEDA;
+ --amber-mid: #EF9F27;
+ --amber-border: #FAC775;
+ --border: #D3D1C7;
+ --border-light: #E8E5DE;
+ --max-w: 720px;
+ }
+ * { margin: 0; padding: 0; box-sizing: border-box; }
+ body { background: var(--bg); color: var(--text); font-family: 'Geologica', sans-serif; font-weight: 300; font-size: 18px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+ .container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+
+ .article-header { padding: 60px 0 48px; border-bottom: 1px solid var(--border); margin-bottom: 56px; }
+ .meta-line { display: flex; gap: 8px; align-items: center; font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); margin-bottom: 28px; }
+ .meta-dot { color: var(--amber-mid); }
+ .article-title { font-family: 'Playfair Display', serif; font-size: clamp(32px, 6vw, 52px); font-weight: 400; line-height: 1.15; color: var(--text); margin-bottom: 16px; }
+ .article-subtitle { font-size: 19px; font-family: 'Geologica', sans-serif; font-weight: 400; color: #1A1A18; margin-bottom: 28px; line-height: 1.7; padding: 16px 20px; background: var(--amber-light); border-left: 3px solid var(--amber-mid); border-radius: 0 8px 8px 0; }
+ .article-deck { font-family: 'Playfair Display', serif; font-style: italic; font-size: 16px; color: var(--amber); line-height: 1.6; }
+
+ .body-text { margin-bottom: 56px; }
+ .body-text p { margin-bottom: 22px; color: var(--text); }
+ .body-text p strong { font-weight: 500; color: var(--text); }
+ .body-text em { font-family: 'Playfair Display', serif; font-style: italic; }
+ .hl { color: var(--amber); font-weight: 500; }
+
+ .timeline-viz { margin: 28px 0; padding: 24px 26px 20px; background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 12px; }
+ .timeline-caption { font-size: 12px; color: var(--text-light); margin-bottom: 34px; letter-spacing: 0.02em; }
+ .timeline-track { position: relative; height: 4px; border-radius: 2px; background: linear-gradient(90deg, var(--amber-mid), var(--amber-border) 60%, var(--border-light)); }
+ .timeline-point { position: absolute; top: 50%; transform: translate(-50%, -50%); text-align: center; }
+ .timeline-dot { display: block; width: 11px; height: 11px; border-radius: 50%; background: var(--amber); border: 2px solid var(--bg-card); margin: 0 auto; box-shadow: 0 0 0 1px var(--amber-border); }
+ .timeline-pct { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; }
+ .timeline-time { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); font-size: 11px; color: var(--text-light); white-space: nowrap; }
+ .timeline-note { margin-top: 30px; font-size: 13.5px; color: var(--text-muted); line-height: 1.6; }
+ .timeline-note strong { color: var(--amber); font-weight: 500; }
+
+ .hook-text { font-size: 21px; line-height: 1.65; color: var(--text); margin-bottom: 0; }
+
+ .empathy-list { margin: 8px 0 36px; }
+ .empathy-item { display: flex; align-items: flex-start; gap: 14px; padding: 15px 0; border-bottom: 1px solid var(--border-light); font-size: 16px; line-height: 1.6; }
+ .empathy-item:last-child { border-bottom: none; }
+ .empathy-marker { width: 6px; height: 6px; border-radius: 50%; background: var(--amber-mid); flex-shrink: 0; margin-top: 9px; }
+ .empathy-text { flex: 1; }
+ .empathy-before { color: var(--text); }
+ .empathy-arrow { color: var(--amber-mid); margin: 0 8px; font-weight: 500; }
+ .empathy-after { color: var(--text-muted); font-style: italic; }
+
+ .big-idea { font-size: 18px; line-height: 1.8; color: var(--text); }
+ .big-idea strong { color: var(--amber); font-weight: 500; }
+
+ .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber); margin-bottom: 6px; }
+ .section-title { font-family: 'Playfair Display', serif; font-size: clamp(22px, 4vw, 30px); font-weight: 400; line-height: 1.3; color: var(--text); margin-bottom: 28px; }
+
+ .mechanism { margin-bottom: 72px; padding-top: 48px; border-top: 1px solid var(--border-light); }
+ .mechanism-number { font-family: 'Playfair Display', serif; font-size: 80px; font-weight: 400; color: var(--amber-border); line-height: 1; margin-bottom: -16px; opacity: 0.6; }
+
+ .research-block { background: var(--amber-light); border-left: 4px solid var(--amber-mid); border-radius: 0 12px 12px 0; padding: 24px 28px; margin: 32px 0; }
+ .research-label { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber); margin-bottom: 10px; }
+ .research-text { font-size: 16px; color: var(--text); line-height: 1.65; margin-bottom: 10px; }
+ .research-source { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); font-style: normal; border: 1px dashed var(--border); border-radius: 4px; padding: 4px 10px; margin-top: 2px; }
+ .research-source::before { content: 'ДОСЬЕ · '; color: var(--amber); letter-spacing: 0.04em; }
+
+ .recognize-list { margin: 32px 0; }
+ .recognize-item { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--border-light); font-size: 15px; color: var(--text); }
+ .recognize-item:last-child { border-bottom: none; }
+ .recognize-icon { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--amber-mid); flex-shrink: 0; margin-top: 2px; }
+
+ .self-test-list .recognize-item { cursor: pointer; user-select: none; transition: color 0.15s; }
+ .self-test-list .recognize-item:hover { color: var(--amber); }
+ .self-test-list .recognize-icon { position: relative; transition: background 0.15s, border-color 0.15s; }
+ .self-test-list .recognize-item.checked .recognize-icon { background: var(--amber-mid); border-color: var(--amber-mid); }
+ .self-test-list .recognize-item.checked .recognize-icon::after { content: ''; position: absolute; left: 6px; top: 2px; width: 5px; height: 9px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(40deg); }
+ .self-test-list .recognize-item.checked { color: var(--text); background: var(--amber-light); margin: 0 -16px; padding: 14px 16px; border-radius: 8px; font-weight: 500; }
+ .self-test-list .recognize-item.checked + .recognize-item { border-top: none; }
+ .self-test-counter { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); margin-top: 22px; transition: color 0.2s; }
+ .self-test-counter.close { color: var(--amber-mid); }
+ #self-test-result { opacity: 0; max-height: 0; overflow: hidden; margin: 0; padding: 0 26px; border-left: 4px solid transparent; transition: opacity 0.5s ease, max-height 0.5s ease, margin 0.4s ease, padding 0.4s ease; }
+ #self-test-result.threshold-met { opacity: 1; max-height: 300px; background: var(--amber-light); border-left-color: var(--amber-mid); padding: 22px 26px; margin: 16px 0 0; font-weight: 500; border-radius: 0 12px 12px 0; }
+ #self-test-result.pulse { animation: selftest-pulse 0.7s ease; }
+ @keyframes selftest-pulse { 0% { box-shadow: 0 0 0 0 rgba(239,159,39,0.55); } 55% { box-shadow: 0 0 28px 8px rgba(239,159,39,0.3); } 100% { box-shadow: 0 0 0 0 rgba(239,159,39,0); } }
+
+ #quiz-step2 { opacity: 0; max-height: 0; overflow: hidden; transition: opacity 0.4s ease, max-height 0.5s ease, margin 0.4s ease; margin-top: 0; }
+ #quiz-step2.visible { opacity: 1; max-height: 500px; margin-top: 24px; }
+ .quiz-step2-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 14px; }
+ .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+ .quiz-option { background: #fff; border: 1.5px solid var(--border); border-radius: 12px; padding: 13px 16px; font-size: 14.5px; color: var(--text); cursor: pointer; transition: all 0.15s; line-height: 1.4; }
+ .quiz-option:hover { border-color: var(--amber-mid); background: var(--amber-light); }
+ #quiz-result { opacity: 0; max-height: 0; overflow: hidden; margin: 0; padding: 0 26px; border-left: 4px solid transparent; transition: opacity 0.5s ease, max-height 0.5s ease, margin 0.4s ease, padding 0.4s ease; }
+ #quiz-result.visible { opacity: 1; max-height: 400px; background: var(--amber-light); border-left-color: var(--amber-mid); padding: 22px 26px; margin: 16px 0 0; border-radius: 0 12px 12px 0; }
+ .quiz-result-label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); margin-bottom: 8px; }
+ .quiz-result-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 400; color: var(--text); margin-bottom: 10px; }
+ .quiz-result-text { font-size: 15px; color: var(--text); line-height: 1.65; }
+
+ .course-block { background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 36px 32px; margin: 48px 0; }
+ @media (max-width: 560px) { .course-block { padding: 24px 20px; } }
+ .course-modules { margin-top: 24px; }
+ .course-module { display: flex; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--border-light); align-items: flex-start; }
+ .course-module:last-child { border-bottom: none; }
+ .module-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--amber-light); border: 1px solid var(--amber-border); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+ .module-info { flex: 1; }
+ .module-name { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+ .module-desc { font-size: 13px; color: var(--text-muted); line-height: 1.45; }
+
+ .timeline-block { background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 36px 32px; margin: 32px 0 48px; }
+ @media (max-width: 560px) { .timeline-block { padding: 24px 20px; } }
+ .timeline-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 400; color: var(--text); margin-bottom: 8px; }
+ .timeline-subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+ .timeline-item2 { display: flex; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--border-light); align-items: flex-start; }
+ .timeline-item2:last-child { border-bottom: none; }
+ .timeline-week { background: var(--amber); color: var(--amber-light); font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; margin-top: 3px; }
+ .timeline-content2-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+ .timeline-content2-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+
+ .price-block { background: #ffffff; border: 2px solid var(--amber-mid); border-radius: 16px; padding: 20px 28px; margin: 0 auto 28px; max-width: 480px; }
+ .price-label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); margin-bottom: 4px; }
+ .price-value { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 400; color: var(--amber); line-height: 1; margin-bottom: 6px; }
+ .price-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+ .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 28px 0; }
+ @media (max-width: 560px) { .stat-grid { grid-template-columns: 1fr; } }
+ .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 16px; text-align: center; }
+ .stat-number { font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 400; color: var(--amber); line-height: 1; margin-bottom: 8px; }
+ .stat-label { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+
+ .diagram-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; margin: 28px 0; }
+ .diagram-title { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-light); margin-bottom: 20px; text-align: center; }
+ .symptoms-center { background: var(--amber); color: var(--amber-light); border-radius: 50%; width: 110px; height: 110px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 13px; font-weight: 500; line-height: 1.3; margin: 0 auto 16px; }
+ .symptom-arrow { text-align: center; color: var(--amber-mid); font-size: 14px; margin-bottom: 12px; }
+ .symptoms-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+ @media (max-width: 560px) { .symptoms-grid { grid-template-columns: repeat(2, 1fr); } }
+ .symptom-chip { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 12.5px; color: var(--text-muted); text-align: center; line-height: 1.3; }
+
+ .brain-layers { display: flex; flex-direction: column; gap: 8px; }
+ .brain-layer { border-radius: 8px; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+ .brain-layer.top { background: #f0f4f8; border: 1px solid #B5D4F4; }
+ .brain-layer.bottom { background: var(--amber-light); border: 1px solid var(--amber-border); }
+ .brain-layer-name { font-size: 14px; font-weight: 500; color: var(--text); flex-shrink: 0; }
+ .brain-layer-desc { font-size: 12px; color: var(--text-muted); text-align: right; max-width: 60%; line-height: 1.4; }
+ .neq-sign { font-size: 24px; color: var(--amber); text-align: center; margin: 2px 0; font-weight: 300; }
+
+ .loop-diagram { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; align-items: center; gap: 8px; margin: 24px 0; }
+ @media (max-width: 560px) { .loop-diagram { grid-template-columns: 1fr; gap: 4px; } .loop-arrow { transform: rotate(90deg); } }
+ .loop-step { background: var(--amber-light); border: 1px solid var(--amber-border); border-radius: 10px; padding: 12px 10px; text-align: center; font-size: 12.5px; color: var(--text); line-height: 1.3; }
+ .loop-arrow { font-size: 18px; color: var(--amber-mid); text-align: center; }
+
+ .before-after-new { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 40px 0; }
+ @media (max-width: 520px) { .before-after-new { grid-template-columns: 1fr; } }
+ .ba-new-before, .ba-new-after { border-radius: 14px; padding: 24px 20px; }
+ .ba-new-before { background: #faf5f5; border: 1px solid #F0959580; }
+ .ba-new-after { background: #f5faf6; border: 1px solid #97C45980; }
+ .ba-new-label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px; }
+ .ba-new-before .ba-new-label { color: #A32D2D; }
+ .ba-new-after .ba-new-label { color: #3B6D11; }
+ .ba-new-category { margin-bottom: 18px; }
+ .ba-new-cat-title { font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+ .ba-new-before .ba-new-cat-title { color: #8B2A2A; }
+ .ba-new-after .ba-new-cat-title { color: #3B6D11; }
+ .ba-new-cat-text { font-size: 13.5px; line-height: 1.55; color: var(--text); }
+
+ .pull-quote { font-family: 'Playfair Display', serif; font-size: 24px; font-style: italic; line-height: 1.5; color: var(--amber); text-align: center; margin: 56px 0; padding: 0 20px; }
+
+ .testimonials { margin: 40px 0; }
+ .testimonial-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 20px 24px; margin-bottom: 16px; }
+ .testi-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+ .testi-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--amber-light); border: 1.5px solid var(--amber-border); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 500; color: var(--amber); flex-shrink: 0; }
+ .testi-meta { flex: 1; }
+ .testi-name { font-size: 14px; font-weight: 500; color: var(--text); }
+ .testi-detail { font-size: 12px; color: var(--text-light); }
+ .testi-badge { font-size: 11px; background: #EAF3DE; color: #3B6D11; border: 1px solid #C0DD97; border-radius: 20px; padding: 3px 10px; white-space: nowrap; }
+ .testi-bubble { background: var(--bg); border-radius: 4px 16px 16px 16px; padding: 14px 18px; font-size: 15px; color: var(--text); line-height: 1.65; }
+ .tg-label { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-light); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+ .tg-dot { width: 6px; height: 6px; background: #29B6F6; border-radius: 50%; display: inline-block; }
+
+ .author-bridge { margin: 48px 0; }
+ .author-bridge p { margin-bottom: 18px; font-size: 17px; color: var(--text); }
+
+ .disclaimer { background: var(--bg-section); border: 1px solid var(--border-light); padding: 20px 26px; margin: 40px 0; font-size: 13px; color: var(--text-muted); line-height: 1.75; border-radius: 8px; }
+ .final-cta { text-align: center; padding: 64px 0 48px; }
+ .final-cta-title { font-family: 'Playfair Display', serif; font-size: clamp(24px, 4vw, 34px); line-height: 1.3; margin-bottom: 32px; }
+ .cta-btn { display: inline-block; background: var(--amber); color: var(--amber-light); font-family: 'Geologica', sans-serif; font-size: 16px; font-weight: 500; padding: 16px 40px; border-radius: 50px; text-decoration: none; transition: all 0.2s; border: none; cursor: pointer; letter-spacing: 0.02em; }
+ .cta-btn:hover { background: #6B3D08; transform: translateY(-1px); }
+ .cta-sub { margin-top: 14px; font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+ hr.divider { border: none; border-top: 1px solid var(--border); margin: 56px 0; }
+
+ .reveal { opacity: 0; transform: translateY(20px); transition: opacity .7s ease, transform .7s ease; }
+ .reveal.in { opacity: 1; transform: translateY(0); }
+ .mechanism-number.reveal { transition-delay: .05s; }
+ .research-block { transition: transform .25s ease, box-shadow .25s ease; }
+ .research-block:hover { transform: translateY(-3px); box-shadow: 0 16px 32px -18px rgba(133,79,11,.28); }
+ .article-header { position: relative; overflow: hidden; }
+ .header-glow { position: absolute; top: -30%; right: -10%; width: 380px; height: 380px; border-radius: 50%; background: radial-gradient(circle, rgba(133,79,11,0.08) 0%, transparent 70%); pointer-events: none; animation: breathe 6.5s ease-in-out infinite; }
+ @keyframes breathe { 0%,100% { opacity: .5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
+ @media (prefers-reduced-motion: reduce) { .reveal{opacity:1!important;transform:none!important;transition:none!important} .header-glow{animation:none} .research-block{transition:none} }
+</style>
+</head>
+<body>
+<div class="container">
+
+ <div class="article-header">
+ <div class="header-glow"></div>
+ <div class="meta-line reveal">Протокол сна <span class="meta-dot">&middot;</span> 10 мин чтения</div>
+ <h1 class="article-title reveal">Пробуешь расстановки, дыхательные практики, отказ от кофе - а сон всё равно не лечит усталость?</h1>
+ <div class="article-subtitle reveal">Дело не в дисциплине и не в силе воли - про то, что мешает телу восстановиться, пока ты спишь.</div>
+ <div class="article-deck reveal">Каждый факт в этой статье - с именем исследователя, университетом и годом, а не просто совет.</div>
+ </div>
+
+ <div class="body-text">
+ <p class="hook-text reveal">Ты уже пробуешь почти всё, что советуют. Читаешь статьи, меняешь привычки, ждёшь, что вот-вот получится. И всё равно - снова здесь, в час ночи, разглядываешь потолок.</p>
+ </div>
+
+ <div class="body-text">
+ <div class="empathy-list">
+ <div class="empathy-item"><span class="empathy-marker"></span><span class="empathy-text"><span class="empathy-before">Гуглишь &laquo;как быстро уснуть&raquo; в третий раз за месяц</span><span class="empathy-arrow">&rarr;</span><span class="empathy-after">и снова закрываешь вкладку без ответа</span></span></div>
+ <div class="empathy-item"><span class="empathy-marker"></span><span class="empathy-text"><span class="empathy-before">Слышишь &laquo;просто расслабься&raquo;</span><span class="empathy-arrow">&rarr;</span><span class="empathy-after">и понимаешь, что этот человек ни разу не лежал без сна до утра</span></span></div>
+ <div class="empathy-item"><span class="empathy-marker"></span><span class="empathy-text"><span class="empathy-before">Считаешь овец, дышишь по методике, включаешь шум дождя</span><span class="empathy-arrow">&rarr;</span><span class="empathy-after">а голова всё равно не выключается</span></span></div>
+ <div class="empathy-item"><span class="empathy-marker"></span><span class="empathy-text"><span class="empathy-before">Обещаешь себе &laquo;сегодня точно высплюсь&raquo;</span><span class="empathy-arrow">&rarr;</span><span class="empathy-after">и в третьем часу ночи снова смотришь в потолок</span></span></div>
+ <div class="empathy-item"><span class="empathy-marker"></span><span class="empathy-text"><span class="empathy-before">Смотришь в зеркало и видишь то же лицо третий день подряд</span><span class="empathy-arrow">&rarr;</span><span class="empathy-after">и называешь это просто &laquo;плохой неделей&raquo;</span></span></div>
+ <div class="empathy-item"><span class="empathy-marker"></span><span class="empathy-text"><span class="empathy-before">Считаешь дни без нормального сна</span><span class="empathy-arrow">&rarr;</span><span class="empathy-after">и боишься признаться, что счёт уже не на дни, а на месяцы</span></span></div>
+ </div>
+ <p class="big-idea reveal">То, что дальше, - не диагноз на одну причину. Это разбор <strong>девяти механизмов</strong>: как это работает внутри тела, почему не помогает то, что ты уже пробуешь, и что с этим можно сделать уже сегодня вечером.</p>
+ </div>
+
+ <div class="body-text">
+ <div class="section-label">&#9656; Проверь себя</div>
+ <div class="section-title">Отметь, что откликается</div>
+ <div class="recognize-list self-test-list" id="self-test">
+ <div class="recognize-item"><div class="recognize-icon"></div>Ложишься с ощущением полной усталости, но лежишь и крутишься до утра</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>Утром слова путаются, мысли обрываются на середине фразы</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>Просыпаешься среди ночи один-два раза и подолгу не можешь уснуть снова</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>Сон длится восемь часов - и всё равно ощущение сонной мухи весь день</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>Выходные не восстанавливают, отпуск помогает на неделю, потом снова ноль</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>Просыпаешься за час-два до будильника и больше не засыпаешь</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>Раздражают мелочи, которые раньше вообще не задевали</div>
+ </div>
+ <div class="self-test-counter" id="self-test-counter">Отмечено: 0 из 7</div>
+ <p id="self-test-result">У тебя <span id="self-test-count-inline">3</span> из 7 - и это не случайность, не характер. Дальше в статье - почему именно это происходит.</p>
+ <div id="quiz-step2">
+ <div class="quiz-step2-title">Что из этого ощущается острее всего прямо сейчас?</div>
+ <div class="quiz-options">
+ <div class="quiz-option" onclick="showSonResult('a')">Не могу выключить голову перед сном - лежу и прокручиваю мысли</div>
+ <div class="quiz-option" onclick="showSonResult('b')">Сон рвётся на куски - просыпаюсь среди ночи и подолгу не засыпаю снова</div>
+ <div class="quiz-option" onclick="showSonResult('v')">Просыпаюсь слишком рано - за час-два до будильника и больше не сплю</div>
+ <div class="quiz-option" onclick="showSonResult('g')">Сплю восемь часов, но не восстанавливаюсь - встаю разбитым в любом случае</div>
+ </div>
+ <div id="quiz-result">
+ <div class="quiz-result-label" id="quiz-result-label"></div>
+ <div class="quiz-result-title" id="quiz-result-title"></div>
+ <div class="quiz-result-text" id="quiz-result-text"></div>
+ </div>
+ </div>
+ </div>
+
+ <div class="body-text">
+ <div class="section-label">&#9656; То, о чём не говорят открыто</div>
+ <div class="section-title">Индустрия сна устроена так, чтобы совет подходил всем и не подходил никому</div>
+ <p>Открой любую статью про бессонницу. Не пей кофе после обеда. Ложись в одно время. Проветривай комнату. Эти советы не ошибочны - они работают у части людей и совершенно бесполезны у остальных, потому что написаны так, будто у бессонницы одна причина на всех.</p>
+ <p>Это не заговор и не выдумка - это просто невыгодно. Универсальный совет продаётся миллионам сразу и ничего не стоит повторить. Точная причина - это разбор одного конкретного человека, который не масштабируется и не тиражируется бесплатно. Итог один и тот же: попробовал общий совет, не сработало, вывод &laquo;значит дело во мне, в моей дисциплине&raquo;. <span class="hl">Дело не в дисциплине.</span> Дело в том, что причина не была найдена, а действие подбиралось вслепую - потому что о ней просто никто не заговорил вслух.</p>
+ <div class="stat-grid">
+ <div class="stat-card"><div class="stat-number">$92 млрд</div><div class="stat-label">мировой рынок средств для сна в 2025 году</div></div>
+ <div class="stat-card"><div class="stat-number">$163 млрд</div><div class="stat-label">прогноз рынка к 2034 году</div></div>
+ <div class="stat-card"><div class="stat-number">12-16%</div><div class="stat-label">взрослых в мире страдают бессонницей</div></div>
+ </div>
+ <div class="research-block">
+ <div class="research-label">Масштаб проблемы</div>
+ <div class="research-text">Рынок растёт вместе с проблемой, а не вместо неё - универсальный совет масштабируется и продаётся, персональная диагностика нет.</div>
+ <div class="research-source">Polaris Market Research, 2025 &middot; метаанализ, National Library of Medicine, 2024</div>
+ </div>
+ </div>
+
+ <div class="mechanism">
+ <div class="mechanism-number">01</div>
+ <div class="section-title">Почему кофе не даёт энергию, а прячет усталость</div>
+ <p>Кофеин не бодрит - он блокирует рецепторы аденозина, вещества, которое накапливается в мозге в течение дня и физически сигналит об усталости. Когда рецепторы заблокированы, сигнал не доходит до сознания, а сама усталость никуда не девается - <span class="hl">она продолжает копиться под блокировкой</span>.</p>
+ <div class="research-block">
+ <div class="research-label">Ключевое исследование</div>
+ <div class="research-text">Кофеин не устраняет усталость, а маскирует сигнал о ней через блокировку аденозиновых рецепторов - накопленная усталость продолжает копиться незаметно для сознания.</div>
+ <div class="research-source">Matthew Walker, UC Berkeley</div>
+ </div>
+ <div class="timeline-viz">
+ <div class="timeline-caption">Сколько кофеина остаётся в мозге после чашки в полдень</div>
+ <div class="timeline-track">
+ <div class="timeline-point" style="left: 0%"><span class="timeline-pct">100%</span><span class="timeline-dot"></span><span class="timeline-time">12:00</span></div>
+ <div class="timeline-point" style="left: 50%"><span class="timeline-pct">~50%</span><span class="timeline-dot"></span><span class="timeline-time">18:00</span></div>
+ <div class="timeline-point" style="left: 100%"><span class="timeline-pct">~25%</span><span class="timeline-dot"></span><span class="timeline-time">00:00</span></div>
+ </div>
+ <div class="timeline-note">«Четвертьжизнь» кофеина - около 12 часов. Чашка в полдень всё ещё на четверть циркулирует в мозге в полночь - <strong>даже без ощущения бодрости от неё</strong>.</div>
+ </div>
+ <div class="recognize-list">
+ <div class="recognize-item"><div class="recognize-icon"></div>Пьёшь последний кофе после 15:00 - и не связываешь это с ночью</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>Засыпаешь без проблем, но сон кажется поверхностным, не глубоким</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>Считаешь только чашки кофе, а не чай, колу и обезболивающие</div>
+ </div>
+ </div>
+
+ <div class="mechanism">
+ <div class="mechanism-number">02</div>
+ <div class="section-title">Почему тело не «расслабляется усилием воли»</div>
+ <p>Засыпание - не решение, которое принимает воля, а физиологический переход, который запускает супрахиазматическое ядро гипоталамуса, синхронизируя внутренние часы организма с уровнем света вокруг. Когда этот механизм сбит - сменной работой, поздним светом экранов, нерегулярным режимом - тело физически не получает команду &laquo;пора&raquo;.</p>
+ <div class="research-block">
+ <div class="research-label">Ключевое исследование</div>
+ <div class="research-text">Циркадные часы синхронизируются со светом через супрахиазматическое ядро - сбитый режим не даёт телу физического сигнала к засыпанию, независимо от усталости.</div>
+ <div class="research-source">Till R&ouml;nneberg, Мюнхенский университет</div>
+ </div>
+ <div class="recognize-list">
+ <div class="recognize-item"><div class="recognize-icon"></div>Время подъёма в будни и выходные отличается больше чем на час-два</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>Первый час после пробуждения проводишь при неярком свете или без окна</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>Сонливость приходит не вечером в одно время, а плавает изо дня в день</div>
+ </div>
+ </div>
+
+ <div class="mechanism">
+ <div class="mechanism-number">03</div>
+ <div class="section-title">Почему утренний свет работает сильнее кофе, а вечерний - тихо мешает</div>
+ <p>В сетчатке глаза есть отдельный светочувствительный белок - меланопсин. Из ста тысяч нейронов, которые передают в мозг картинку, лишь около пяти тысяч содержат меланопсин - и их задача не в том, чтобы видеть, а в том, чтобы сообщать супрахиазматическому ядру, главным часам мозга, сколько сейчас света вокруг. Меланопсин максимально чувствителен к синему спектру и почти не реагирует на тёплый, оранжевый свет - поэтому тёплый вечерний свет и яркий утренний физиологически, а не по совету из блога, синхронизируют циркадный ритм.</p>
+ <div class="stat-grid">
+ <div class="stat-card"><div class="stat-number">~5000</div><div class="stat-label">из 100 000 нейронов сетчатки содержат меланопсин</div></div>
+ <div class="stat-card"><div class="stat-number">1 неделя</div><div class="stat-label">обычным мышам на подстройку часов под новый режим</div></div>
+ <div class="stat-card"><div class="stat-number">~1 месяц</div><div class="stat-label">мышам без меланопсина на ту же подстройку</div></div>
+ </div>
+ <div class="research-block">
+ <div class="research-label">Ключевое исследование</div>
+ <div class="research-text">Мышей с отключённым геном меланопсина помещали в новый цикл свет/тьма - без этого белка внутренние часы подстраиваются в разы медленнее, даже когда глаза видят свет так же хорошо.</div>
+ <div class="research-source">Satchin Panda, Институт Солка</div>
+ </div>
+ <div class="recognize-list">
+ <div class="recognize-item"><div class="recognize-icon"></div>Работаешь при холодном белом или синем офисном свете допоздна</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>Смотришь в телефон в кровати &laquo;всего на пять минут&raquo; перед сном</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>Просыпаешься затемно и не выходишь на улицу до обеда</div>
+ </div>
+ </div>
+
+ <div class="mechanism">
+ <div class="mechanism-number">04</div>
+ <div class="section-title">Почему бокал вина ускоряет засыпание и портит вторую половину ночи</div>
+ <p>Бокал вина перед сном кажется безобидным - и в первой половине ночи правда быстрее засыпаешь, сон ненадолго становится глубже. Но именно тогда, пока печень перерабатывает алкоголь, REM-сон подавляется, а затем происходит его рикошетный всплеск - вторая половина ночи становится прерывистой и поверхностной, даже если формально сна было достаточно часов.</p>
+ <div class="research-block">
+ <div class="research-label">Ключевое исследование</div>
+ <div class="research-text">Систематический обзор 27 исследований показал: алкоголь стабильно подавляет REM-сон уже начиная примерно с двух порций, а эффект усиливается с дозой - независимо от того, насколько легко человек засыпает после бокала.</div>
+ <div class="research-source">Метаанализ, Sleep Medicine Reviews, 2025</div>
+ </div>
+ <div class="recognize-list">
+ <div class="recognize-item"><div class="recognize-icon"></div>Бокал вина - обычная часть вечера перед сном</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>Засыпаешь легко, но просыпаешься в 4-5 утра и лежишь до будильника</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>После вечера с алкоголем сон кажется поверхностным, хотя длился достаточно</div>
+ </div>
+ </div>
+
+ <div class="mechanism">
+ <div class="mechanism-number">05</div>
+ <div class="section-title">Почему 30 минут дневного сна в кресле пилота стали официальным протоколом NASA</div>
+ <p>Дневной сон - не слабость и не признак того, что ты плохо спишь ночью. Короткий дневной сон снимает часть накопленного за день давления сна, если использовать его правильно: не дольше 20-30 минут и не позже 15:00 - иначе он заходит в глубокие фазы и <span class="hl">крадёт то самое вечернее давление сна</span>, которое нужно для лёгкого засыпания ночью.</p>
+ <div class="research-block">
+ <div class="research-label">Ключевое исследование</div>
+ <div class="research-text">Дэвид Динджес с коллегами тестировал плановый 30-минутный сон в кресле пилота во время дальнемагистральных перелётов - эффект измеряли объективным тестом психомоторной бдительности, а не самоощущением. Результаты легли в основу официального циркуляра Федерального управления гражданской авиации США: это не совет из интернета, а протокол, встроенный в индустрию, где цена ошибки от усталости - человеческие жизни.</div>
+ <div class="research-source">David Dinges · NASA / FAA circular</div>
+ </div>
+ <div class="recognize-list">
+ <div class="recognize-item"><div class="recognize-icon"></div>После дневного сна дольше получаса встаёшь более разбитым, чем до него</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>Дневной сон после 16:00 - и вечером трудно уснуть в обычное время</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>Переносишь недосып заметно хуже коллег, хотя спишь примерно столько же</div>
+ </div>
+ </div>
+
+ <div class="mechanism">
+ <div class="mechanism-number">06</div>
+ <div class="section-title">Почему усталость перестаёт ощущаться, хотя она никуда не делась</div>
+ <p>Организм адаптируется не к недосыпу, а к ощущению недосыпа - субъективная сонливость падает быстрее, чем реальная работоспособность мозга. Человек перестаёт замечать, что не высыпается, а реакция, память и эмоциональная регуляция продолжают проседать без ощущения тревоги.</p>
+ <div class="research-block">
+ <div class="research-label">Ключевое исследование</div>
+ <div class="research-text">Субъективное ощущение сонливости падает быстрее объективной работоспособности - человек перестаёт замечать собственный недосып, продолжая функционировать &laquo;на автомате&raquo;.</div>
+ <div class="research-source">David Dinges, University of Pennsylvania</div>
+ </div>
+ <div class="recognize-list">
+ <div class="recognize-item"><div class="recognize-icon"></div>Говоришь себе &laquo;мне норм мало спать&raquo;</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>Реакция и память проседают, а сам факт усталости не ощущается</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>Больше не помнишь, каково это - просыпаться без будильника отдохнувшим</div>
+ </div>
+ </div>
+
+ <div class="mechanism">
+ <div class="mechanism-number">07</div>
+ <div class="section-title">Почему выходные не закрывают долг сна за неделю</div>
+ <p>«Отосплюсь в субботу» работает не так, как кажется. В контролируемых лабораторных исследованиях после нескольких ночей ограниченного сна даже три ночи полноценного восстановительного сна подряд не возвращали работоспособность к исходному уровню - разрыв оставался измеримым. <span class="hl">Долг сна не обнуляется одной длинной ночью, он накапливается медленнее, чем расходуется.</span></p>
+ <div class="research-block">
+ <div class="research-label">Ключевое исследование</div>
+ <div class="research-text">После серии ночей с ограничением сна работоспособность не восстанавливалась полностью даже после нескольких ночей полноценного 8-часового сна подряд - долг накапливается быстрее, чем гасится.</div>
+ <div class="research-source">Hans Van Dongen &amp; David Dinges, University of Pennsylvania</div>
+ </div>
+ <div class="recognize-list">
+ <div class="recognize-item"><div class="recognize-icon"></div>После одной &laquo;отсыпной&raquo; субботы всё равно чувствуешь себя не до конца свежим</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>Считаешь, что 6 часов буднями - это нормально, ведь &laquo;выходные компенсируют&raquo;</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>Отпуск помогает на неделю, а потом усталость возвращается на то же место</div>
+ </div>
+ </div>
+
+ <div class="mechanism">
+ <div class="mechanism-number">08</div>
+ <div class="section-title">Почему невыплаканные за день эмоции не отпускают ночью</div>
+ <p>Сон - не только про тело, но и про то, что мозг делает с пережитым за день. Во время REM-фазы (быстрый сон, сны) уровень гормона стресса норадреналина в мозге резко падает - именно в этом &laquo;безопасном&raquo; химическом окне мозг повторно проигрывает дневные эмоциональные события и снижает их остроту к утру. Когда REM-сна не хватает, этот процесс не завершается - и вчерашняя тревога встречает с той же силой, что и вчера.</p>
+ <div class="research-block">
+ <div class="research-label">Ключевое исследование</div>
+ <div class="research-text">После ночи с REM-сном реактивность миндалевидного тела (центра эмоций мозга) на пережитые накануне эмоциональные события заметно снижалась - у не спавших участников снижения не было.</div>
+ <div class="research-source">Els van der Helm &amp; Matthew Walker, UC Berkeley, Current Biology, 2011</div>
+ </div>
+ <div class="recognize-list">
+ <div class="recognize-item"><div class="recognize-icon"></div>После бессонной ночи любая мелочь выбивает из колеи сильнее обычного</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>Тревога о рабочем моменте живёт в теле сутками, а не проходит за вечер</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>Просыпаешься с тем же чувством, с каким ложишься спать - будто ночи и не было</div>
+ </div>
+ </div>
+
+ <div class="mechanism">
+ <div class="mechanism-number">09</div>
+ <div class="section-title">Почему сама попытка уснуть иногда и есть причина, по которой не спится</div>
+ <p>Знакомая ситуация: тело устало весь вечер - а как только ложишься в постель, голова включается на полную мощность. Это не случайность и не характер. Постель за годы связывается в мозге не с сигналом «спать», а с сигналом «наконец есть время подумать обо всём, что откладывал весь день» - и тревожные мысли включаются по этой ассоциации, а не потому что ночь специально для них плохое время.</p>
+ <div class="diagram-box">
+ <div class="diagram-title">Петля условного возбуждения</div>
+ <div class="loop-diagram">
+ <div class="loop-step">Ложишься в постель</div>
+ <div class="loop-arrow">&rarr;</div>
+ <div class="loop-step">Мозг включает тревожные мысли по привычке</div>
+ <div class="loop-arrow">&rarr;</div>
+ <div class="loop-step">Не получается уснуть</div>
+ <div class="loop-arrow">&rarr;</div>
+ <div class="loop-step">Постель ещё крепче связывается с тревогой</div>
+ </div>
+ </div>
+ <p>Разорвать эту петлю изнутри неё самой не получается - чем сильнее стараешься уснуть усилием воли, тем активнее мозг ищет, чем ещё заняться в постели. Нужен инструмент с другого угла: не бороться с мыслями, а разорвать саму связку «постель = время для тревоги».</p>
+ <div class="research-block">
+ <div class="research-label">Ключевое исследование</div>
+ <div class="research-text">В когнитивно-поведенческой терапии инсомнии (CBT-I) это описано как условное возбуждение (conditioned arousal) - постель и ритуал отхода ко сну становятся условным сигналом бодрствования вместо сигнала сна. Именно на разрыв этой связки нацелена одна из ключевых техник CBT-I - контроль стимулов.</div>
+ <div class="research-source">Bootzin R.R., stimulus control therapy for insomnia · основа современной CBT-I</div>
+ </div>
+ <div class="recognize-list">
+ <div class="recognize-item"><div class="recognize-icon"></div>В постели голова включается на полную, хотя тело весь день было уставшим</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>Чем больше стараешься уснуть, тем меньше получается</div>
+ <div class="recognize-item"><div class="recognize-icon"></div>Ловишь себя на мысли «опять не усну» ещё до того, как лёг</div>
+ </div>
+ </div>
+
+ <div class="body-text">
+ <div class="section-label">&#9656; Масштаб</div>
+ <div class="section-title">Как один и тот же корень бьёт по работе, отношениям и телу</div>
+ <p>Циркадный сбой выражается днём как провалы концентрации на встречах и решения, которые зависают на неделю. Накопленная и незамеченная усталость выражается в отношениях как раздражительность на пустом месте. А тело, которое не выходит из режима тревоги ночью, не выходит из него и днём - отсюда мурашки, спазмы, дрожь в руках без видимой причины.</p>
+ <div class="diagram-box">
+ <div class="diagram-title">Один корень - все симптомы</div>
+ <div class="symptoms-center">Ненайденная причина бессонницы</div>
+ <div class="symptom-arrow">&darr; питает всё &darr;</div>
+ <div class="symptoms-grid">
+ <div class="symptom-chip">Голова &middot; провалы концентрации, решения зависают</div>
+ <div class="symptom-chip">Энергия &middot; пусто к вечеру, выходные не восстанавливают</div>
+ <div class="symptom-chip">Отношения &middot; раздражительность на пустом месте</div>
+ <div class="symptom-chip">Тело &middot; мурашки, спазмы, дрожь без причины</div>
+ <div class="symptom-chip">Работа &middot; провалы концентрации на встречах</div>
+ <div class="symptom-chip">Иммунитет &middot; болеешь чаще и дольше обычного</div>
+ </div>
+ </div>
+ </div>
+
+ <hr class="divider">
+
+ <div class="body-text">
+ <div class="section-label">&#9656; Возражение</div>
+ <div class="section-title">Почему терапия и осознанность помогают - но не до конца</div>
+ <p>Терапия хорошо работает с тем, что происходит в сознании: с историей, с эмоциональной регуляцией через разговор. Ни один из этих инструментов не создавался для того, чтобы диагностировать циркадный сбой или химическую блокировку сигналов усталости - это не их зона.</p>
+ <div class="diagram-box">
+ <div class="diagram-title">Два уровня одной проблемы</div>
+ <div class="brain-layers">
+ <div class="brain-layer top"><div class="brain-layer-name">Сознание</div><div class="brain-layer-desc">Терапия &middot; осознанность &middot; разговор &middot; история</div></div>
+ <div class="neq-sign">&ne;</div>
+ <div class="brain-layer bottom"><div class="brain-layer-name">Физиология</div><div class="brain-layer-desc">Циркадный сбой &middot; долг сна &middot; тело в режиме тревоги ночью</div></div>
+ </div>
+ </div>
+ <p>Отсюда типичный опыт: годы терапии дают облегчение, а сон как не восстанавливал, так и не восстанавливает. Это значит, что у бессонницы есть физиологический слой, до которого разговорные методы не добираются в принципе.</p>
+ </div>
+
+ <div class="before-after-new">
+ <div class="ba-new-before">
+ <div class="ba-new-label">Сейчас</div>
+ <div class="ba-new-category"><div class="ba-new-cat-title">Тело</div><div class="ba-new-cat-text">Просыпается уже уставшим, тревога фоном без причины, сигналит годами - мурашки, спазмы, дрожь в руках</div></div>
+ <div class="ba-new-category"><div class="ba-new-cat-title">Энергия</div><div class="ba-new-cat-text">К вечеру пусто, выходные не восстанавливают, отпуск помогает на неделю и снова ноль</div></div>
+ <div class="ba-new-category" style="margin-bottom:0"><div class="ba-new-cat-title">Голова</div><div class="ba-new-cat-text">Слова путаются от недосыпа, мысли обрываются, решения зависают на неделю</div></div>
+ </div>
+ <div class="ba-new-after">
+ <div class="ba-new-label">Когда причина найдена</div>
+ <div class="ba-new-category"><div class="ba-new-cat-title">Тело</div><div class="ba-new-cat-text">Тревога, которая жила в теле годами, начинает отступать - убран конкретный источник перегрузки</div></div>
+ <div class="ba-new-category"><div class="ba-new-cat-title">Энергия</div><div class="ba-new-cat-text">Энергия есть в обычный вторник, не только в отпуске - действия направлены на конкретную причину</div></div>
+ <div class="ba-new-category" style="margin-bottom:0"><div class="ba-new-cat-title">Голова</div><div class="ba-new-cat-text">Замечаешь конкретные изменения по дням - а не гадаешь &laquo;вроде получше&raquo;</div></div>
+ </div>
+ </div>
+
+ <div class="section-label">&#9656; Живые отзывы</div>
+ <div class="section-title" style="margin-bottom:20px">Что говорят те, кто нашёл свою причину</div>
+ <div class="testimonials">
+ <div class="testimonial-card">
+ <div class="tg-label"><span class="tg-dot"></span>Telegram &middot; личное сообщение</div>
+ <div class="testi-header">
+ <div class="testi-avatar">ИМ</div>
+ <div class="testi-meta">
+ <div class="testi-name">Ирина М.</div>
+ <div class="testi-detail">33 года &middot; Санкт-Петербург</div>
+ </div>
+ </div>
+ <div class="testi-bubble">Всегда думала, что дело в дисциплине - ложиться пораньше, не пить кофе. Тест показал профиль, к которому вообще не была готова. Через две недели по своему списку действий вставать стало легче, чем за весь прошлый год попыток.</div>
+ </div>
+ <div class="testimonial-card">
+ <div class="tg-label"><span class="tg-dot"></span>Telegram &middot; личное сообщение</div>
+ <div class="testi-header">
+ <div class="testi-avatar">ПС</div>
+ <div class="testi-meta">
+ <div class="testi-name">Павел С.</div>
+ <div class="testi-detail">37 лет &middot; Новосибирск</div>
+ </div>
+ </div>
+ <div class="testi-bubble">Не верилось в тесты - казалось, что разводят на общие советы под видом персонализации. Отчёт оказался конкретным: не &laquo;спи больше&raquo;, а что именно чинить. Трекер за 30 дней показал разницу в цифрах, не в ощущениях.</div>
+ </div>
+ <div class="testimonial-card">
+ <div class="tg-label"><span class="tg-dot"></span>Telegram &middot; личное сообщение</div>
+ <div class="testi-header">
+ <div class="testi-avatar">АТ</div>
+ <div class="testi-meta">
+ <div class="testi-name">Анастасия Т.</div>
+ <div class="testi-detail">26 лет &middot; Казань</div>
+ </div>
+ </div>
+ <div class="testi-bubble">Спала восемь часов и всё равно как сонная муха - списывалось на работу. Причина оказалась не в графике, а в том, что тело не выходило из режима тревоги. Протокол под это дал четыре конкретных действия, не список из двадцати советов.</div>
+ </div>
+ </div>
+
+ <div class="section-label">&#9656; Почему я в этом разбираюсь</div>
+ <div class="author-bridge">
+ <p>У меня самой было несколько лет, когда сон не восстанавливал вообще - даже после восьми часов в постели было ощущение, что не спала совсем. Утренний туман в голове, а должность руководителя требовала обратного: ясных решений, а не &laquo;сегодня не соображаю&raquo;. Дома - то же самое: сил хватало только лечь и не двигаться.</p>
+ <p>Расстановки, дыхательные практики, отказ от кофе - помогало на пару дней и возвращалось на те же круги. Дело оказалось не в дисциплине, раз перепробовано так много и без толку.</p>
+ <p>Разбор пошёл не с симптома, а с механизма - почему сон не лечит усталость, даже когда его формально достаточно. Нашлись причины, которые никто не называл вслух: циркадный сбой, накопленный долг сна, тело в режиме тревоги даже ночью.</p>
+ <p>Туман стал короче, потом исчез. Решения на работе перестали зависать, дома снова появились силы на разговор. То, что сработало, легло на научную базу - и стало системой, которой я теперь делюсь с тобой.</p>
+ </div>
+
+ <div class="pull-quote">&laquo;Я нашла свою причину.<br>Дальше - твоя.&raquo;</div>
+
+ <div class="course-block">
+ <div class="section-label">&#9656; Протокол сна</div>
+ <div class="section-title" style="margin-bottom:8px">Не курс из 17 уроков подряд - маршрут под твою причину</div>
+ <p style="font-size:15px; color:var(--text-muted); line-height:1.6">Научная база + диагностика + конкретный протокол на каждый день - собранные в систему, которую проходишь в своём темпе.</p>
+ <div class="course-modules">
+ <div class="course-module"><div class="module-icon">&#128269;</div><div class="module-info"><div class="module-name">Старт и диагностика</div><div class="module-desc">Первый рабочий протокол уже в первом уроке - плюс тест, который определяет, с чего начинать именно тебе.</div></div></div>
+ <div class="course-module"><div class="module-icon">&#127760;</div><div class="module-info"><div class="module-name">Архитектура сна</div><div class="module-desc">Сколько сна реально нужно именно тебе - не по общим нормам, а по фазам и глимфатической системе.</div></div></div>
+ <div class="course-module"><div class="module-icon">&#9728;&#65039;</div><div class="module-info"><div class="module-name">Циркадный ритм</div><div class="module-desc">Свой хронотип и три рычага - свет, температура, движение - которые сдвигают внутренние часы без будильника.</div></div></div>
+ <div class="course-module"><div class="module-icon">&#9749;</div><div class="module-info"><div class="module-name">Что разрушает сон</div><div class="module-desc">Кофеин, алкоголь, экраны, беспокойный ум - что из этого реально твой случай, а что миф.</div></div></div>
+ <div class="course-module"><div class="module-icon">&#128737;&#65039;</div><div class="module-info"><div class="module-name">Протоколы восстановления</div><div class="module-desc">CBT-I - золотой стандарт лечения бессонницы - плюс протоколы под джетлаг, сменный график и дневной сон.</div></div></div>
+ <div class="course-module"><div class="module-icon">&#128506;&#65039;</div><div class="module-info"><div class="module-name">Твоя система</div><div class="module-desc">Всё собирается в личный протокол под твой профиль, с 30-дневным трекером - сверяешь результат в цифрах, не на ощущениях.</div></div></div>
+ </div>
+ </div>
+
+ <div class="timeline-block">
+ <div class="timeline-title">Что происходит после того, как найдена причина</div>
+ <div class="timeline-subtitle">Конкретно - по неделям, без сюрпризов.</div>
+ <div class="timeline-item2"><div class="timeline-week">Неделя 1</div><div><div class="timeline-content2-title">Диагностика + первый протокол</div><div class="timeline-content2-desc">Впервые видишь конкретно, какая из четырёх причин твоя - и начинаешь с урока, который решает именно её, а не общий список советов.</div></div></div>
+ <div class="timeline-item2"><div class="timeline-week">Неделя 2</div><div><div class="timeline-content2-title">Протоколы под свою причину</div><div class="timeline-content2-desc">Действия направлены точно туда, где проблема - а не размазаны на всё сразу. Первые изменения уже заметны по вечерам.</div></div></div>
+ <div class="timeline-item2"><div class="timeline-week">Неделя 3-4</div><div><div class="timeline-content2-title">Сборка личного протокола</div><div class="timeline-content2-desc">Всё собирается в систему под твой профиль. Трекер показывает разницу в цифрах, а не &laquo;вроде получше&raquo;.</div></div></div>
+ <div class="timeline-item2"><div class="timeline-week">После</div><div><div class="timeline-content2-title">Доступ навсегда</div><div class="timeline-content2-desc">Материалы не пропадают - возвращаешься к нужному уроку, когда нужно, без дедлайнов.</div></div></div>
+ </div>
+
+ <div class="final-cta">
+ <div class="final-cta-title">Сон не восстанавливает не потому, что что-то не так с тобой.<br>А потому что причину ещё не нашли.</div>
+ <div class="price-block">
+ <div class="price-label">Стоимость участия</div>
+ <div class="price-value">от 990 &#8381;</div>
+ <div class="price-desc">Дешевле одной консультации сомнолога. Одна оплата, доступ навсегда, без дедлайнов.</div>
+ </div>
+ <a class="cta-btn" href="index.html?utm_source=article&amp;utm_medium=cta_main&amp;utm_campaign=protokol_sna">Смотреть протокол</a>
+ <div class="cta-sub">Диагностика твоей причины &middot; персональный маршрут &middot; проверка через 30 дней</div>
+ </div>
+
+ <div class="disclaimer">Курс не заменяет консультацию врача, психотерапию или лечение при клинических нарушениях сна и не подходит при тяжёлых травматичных состояниях - если нарушения сна долгие и сильные, лучше начать с очного специалиста. Курс не даёт гарантированного результата в конкретные сроки - это система самостоятельной работы, а не медицинская процедура.</div>
+
+</div>
+<script>
+var revealSelectors = '.pull-quote';
+document.querySelectorAll(revealSelectors).forEach(function(el, i){
+  el.classList.add('reveal');
+  el.style.transitionDelay = (i % 3) * 0.06 + 's';
+});
+
+var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if('IntersectionObserver' in window && !reduceMotion){
+  var revealIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); revealIO.unobserve(e.target); }
+    });
+  }, {threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ revealIO.observe(el); });
+} else {
+  document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+}
+
+var selfTest = document.getElementById('self-test');
+if (selfTest) {
+  var resultEl = document.getElementById('self-test-result');
+  var counterEl = document.getElementById('self-test-counter');
+  var countInlineEl = document.getElementById('self-test-count-inline');
+  selfTest.querySelectorAll('.recognize-item').forEach(function(item){
+    item.addEventListener('click', function(){
+      item.classList.toggle('checked');
+      var count = selfTest.querySelectorAll('.recognize-item.checked').length;
+      if (counterEl) {
+        counterEl.textContent = 'Отмечено: ' + count + ' из 7';
+        counterEl.classList.toggle('close', count === 2);
+      }
+      if (countInlineEl) {
+        countInlineEl.textContent = count;
+      }
+      if (count >= 3 && resultEl && !resultEl.classList.contains('threshold-met')) {
+        resultEl.classList.add('threshold-met');
+        resultEl.classList.add('pulse');
+      }
+      var step2 = document.getElementById('quiz-step2');
+      if (step2) {
+        step2.classList.toggle('visible', count >= 3);
+        if (count < 3) {
+          var qr = document.getElementById('quiz-result');
+          if (qr) qr.classList.remove('visible');
+        }
+      }
+    });
+  });
+}
+
+var sonResults = {
+  a: { title: '«Не могу выключить голову»', text: 'Похоже, дело не в теле, а в переходе от бодрствования ко сну - мозг остаётся активным именно тогда, когда должен успокаиваться. Полный тест «Профиль сна» (12 вопросов) подтверждает это точно и даёт готовый план на твой случай.' },
+  b: { title: '«Сон рвётся на куски»', text: 'Похоже, что-то физически прерывает непрерывность сна в течение ночи - температура в спальне, поздний приём пищи или алкоголь чаще всего стоят за этим профилем. Полный тест «Профиль сна» (12 вопросов) подтверждает причину точно.' },
+  v: { title: '«Просыпаюсь слишком рано»', text: 'Похоже на сдвиг циркадного ритма - внутренние часы не совпадают с графиком, отсюда и тревога в ранние утренние часы. Полный тест «Профиль сна» (12 вопросов) подтверждает это точно и даёт готовый маршрут.' },
+  g: { title: '«Сплю, но не восстанавливаюсь»', text: 'Самый коварный профиль - количество сна есть, а качества нет. Чаще всего дело либо в архитектуре самого сна, либо в скрытых нарушителях вроде кофеина после обеда. Полный тест «Профиль сна» (12 вопросов) подтверждает причину точно.' }
+};
+function showSonResult(key) {
+  var r = sonResults[key];
+  if (!r) return;
+  document.getElementById('quiz-result-label').textContent = 'Похоже на твой профиль';
+  document.getElementById('quiz-result-title').textContent = r.title;
+  document.getElementById('quiz-result-text').textContent = r.text;
+  document.getElementById('quiz-result').classList.add('visible');
+}
+</script>
+</body>
+</html>

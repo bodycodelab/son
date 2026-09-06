@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Протокол сна - тест на 4 причины бессонницы</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Geologica:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f5f0; --bg-warm: #f0ece3; --bg-card: #ffffff;
+  --bg-dark: #1a1a18; --bg-dark-mid: #242420;
+  --text: #2C2C2A; --text-body: #3a3a38; --text-muted: #5F5E5A; --text-light: #888780;
+  --amber: #854F0B; --amber-mid: #c07c20; --amber-light: #FAEEDA; --amber-border: #e8b870; --amber-bright: #d4913a;
+  --border: #D3D1C7; --border-light: #E8E5DE;
+  --green: #2d6a2d; --green-light: #edf5ed; --red-soft: #c0392b;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Geologica', sans-serif; font-weight: 300; background: var(--bg); color: var(--text-body); -webkit-font-smoothing: antialiased; transition: background-color 1.2s ease; }
+body[data-tone="dusk"] { background: #efe6d8; }
+body[data-tone="dawn"] { background: #faf3e6; }
+.container { max-width: 900px; margin: 0 auto; padding: 0 32px; }
+
+/* HERO */
+.hero { background: var(--bg-dark); padding: 100px 32px 88px; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 50% at 85% 15%, rgba(212,145,58,0.08) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 5% 85%, rgba(212,145,58,0.04) 0%, transparent 60%); pointer-events: none; }
+.hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(212,145,58,0.5), transparent); }
+.hero-glow { position: absolute; top: -10%; right: 8%; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(212,145,58,0.16) 0%, transparent 70%); pointer-events: none; animation: breathe 6s ease-in-out infinite; }
+@keyframes breathe { 0%,100% { opacity: .55; transform: scale(1); } 50% { opacity: 1; transform: scale(1.12); } }
+.hero-inner { max-width: 840px; margin: 0 auto; position: relative; z-index: 1; }
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.in { opacity: 1; transform: translateY(0); }
+.reveal-1{transition-delay:.05s}.reveal-2{transition-delay:.12s}.reveal-3{transition-delay:.19s}
+.pricing-card { transition: transform .25s ease, box-shadow .25s ease; }
+.pricing-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px -18px rgba(133,79,11,0.25); }
+.pricing-card.featured:hover { transform: translateY(-8px) scale(1.015); }
+.test-card { transition: transform .2s ease, border-color .2s ease; }
+.test-card:hover { transform: translateY(-3px); border-color: var(--amber-border); }
+@media (prefers-reduced-motion: reduce) { .reveal{opacity:1!important;transform:none!important;transition:none!important} .hero-glow{animation:none} .pricing-card,.test-card{transition:none} }
+.hero-tag { display: flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 44px; }
+.hero-tag-dot { width: 4px; height: 4px; background: var(--amber-mid); border-radius: 50%; flex-shrink: 0; }
+.hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 58px); font-weight: 400; line-height: 1.15; color: #f5f2eb; margin-bottom: 32px; letter-spacing: -0.01em; }
+.hero h1 em { font-style: italic; color: var(--amber-border); }
+.hero-deck { font-size: clamp(15px, 1.8vw, 17px); color: rgba(245,242,235,0.5); line-height: 1.85; max-width: 560px; margin-bottom: 20px; font-weight: 300; border-left: 2px solid rgba(232,184,112,0.25); padding-left: 20px; }
+.hero-proof { display: flex; gap: 20px; flex-wrap: wrap; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(232,184,112,0.7); letter-spacing: 0.04em; margin-bottom: 44px; }
+.hero-btns { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
+.btn-primary { background: var(--amber-bright); color: #fff; font-family: 'Geologica', sans-serif; font-size: 15px; font-weight: 600; padding: 18px 48px; text-decoration: none; letter-spacing: 0.01em; transition: background 0.2s, transform 0.15s; display: inline-block; }
+.btn-primary:hover { background: var(--amber-mid); transform: translateY(-1px); }
+.hero-note { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.16); }
+
+/* SECTION DIVIDER */
+.section-label { display: flex; align-items: center; gap: 16px; margin: 80px 0 48px; }
+.section-line { flex: 1; height: 1px; background: var(--border-light); }
+.section-text { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--amber); white-space: nowrap; opacity: 0.7; }
+.section-h2 { font-family: 'Playfair Display', serif; font-size: clamp(22px, 4vw, 32px); font-weight: 400; line-height: 1.3; color: var(--text); margin-bottom: 24px; }
+.section-p { font-size: 15px; color: var(--text-muted); line-height: 1.85; max-width: 640px; margin-bottom: 20px; }
+
+/* TEST MECHANIC */
+.test-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 32px 0; }
+@media (max-width: 640px) { .test-grid { grid-template-columns: 1fr; } }
+.test-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 12px; padding: 22px 24px; }
+.test-card-title { font-family: 'Playfair Display', serif; font-size: 17px; margin-bottom: 8px; color: var(--text); }
+.test-card-text { font-size: 13.5px; color: var(--text-muted); line-height: 1.6; }
+
+/* PRICING */
+.pricing-section { padding: 40px 32px 88px; }
+.pricing-inner { max-width: 980px; margin: 0 auto; }
+.price-anchor { background: var(--amber-light); border: 1px solid var(--amber-border); border-radius: 12px; padding: 20px 28px; margin: 0 0 32px; text-align: center; }
+.price-anchor-text { font-size: 15px; line-height: 1.7; color: var(--text); }
+.price-anchor-text s { color: var(--text-light); text-decoration-color: var(--red-soft); }
+.price-anchor-text strong { color: var(--amber); }
+.pricing-desc { background: var(--bg-warm); border: 1px solid var(--border-light); padding: 22px 28px; margin-bottom: 28px; font-size: 14px; color: var(--text-muted); line-height: 1.85; }
+.pricing-desc strong { color: var(--text); font-weight: 600; }
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+@media (max-width: 860px) { .pricing-grid { grid-template-columns: 1fr; } }
+.pricing-card { background: var(--bg-card); border: 1px solid var(--border-light); overflow: hidden; position: relative; }
+.pricing-card.featured { border-color: var(--amber-mid); }
+.pricing-card-head { padding: 26px 24px 20px; border-bottom: 1px solid var(--border-light); }
+.pricing-card.plain .pricing-card-head { border-top: 3px solid var(--border); }
+.pricing-card.featured .pricing-card-head { border-top: 3px solid var(--amber-mid); }
+.pricing-badge { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; padding: 3px 10px; margin-bottom: 12px; display: inline-block; }
+.pricing-badge.plain { background: var(--bg-warm); color: var(--text-muted); }
+.pricing-badge.featured { background: var(--amber-light); color: var(--amber); }
+.pricing-badge.popular { background: var(--amber-mid); color: #fff; position: absolute; top: 18px; right: 18px; font-size: 9px; }
+.pricing-name { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 400; color: var(--text); margin-bottom: 6px; }
+.pricing-tagline { font-size: 12.5px; font-weight: 300; color: var(--text-muted); margin-bottom: 18px; line-height: 1.6; }
+.pricing-price { font-family: 'Playfair Display', serif; font-size: 38px; font-weight: 400; color: var(--text); letter-spacing: -0.02em; line-height: 1; margin-bottom: 4px; }
+.pricing-price-note { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); }
+.pricing-card-body { padding: 20px 24px 24px; }
+.pricing-features { list-style: none; margin-bottom: 22px; }
+.pricing-features li { font-size: 12.5px; color: var(--text-muted); padding: 7px 0; border-bottom: 1px solid var(--border-light); display: flex; gap: 8px; line-height: 1.5; }
+.pricing-features li:last-child { border-bottom: none; }
+.feat-yes { color: var(--green); font-weight: 600; flex-shrink: 0; font-size: 12px; }
+.feat-no { color: var(--border); flex-shrink: 0; }
+.pricing-btn { display: block; text-align: center; font-family: 'Geologica', sans-serif; font-size: 14px; font-weight: 600; padding: 15px 20px; text-decoration: none; transition: all 0.2s; letter-spacing: 0.01em; }
+.pricing-btn.plain { background: var(--bg-warm); color: var(--text); border: 1px solid var(--border); }
+.pricing-btn.plain:hover { background: var(--border-light); }
+.pricing-btn.featured { background: var(--amber-bright); color: white; }
+.pricing-btn.featured:hover { background: var(--amber-mid); }
+.pricing-safety { text-align: center; padding: 28px 0 6px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; }
+.pricing-safety-dot { width: 3px; height: 3px; background: var(--border); border-radius: 50%; flex-shrink: 0; }
+
+/* BONUSES */
+.bonus-list { margin: 32px 0; }
+.bonus-item { display: flex; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--border-light); }
+.bonus-item:last-child { border-bottom: none; }
+.bonus-num { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--amber-border); flex-shrink: 0; width: 32px; }
+.bonus-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+.bonus-text { font-size: 13.5px; color: var(--text-muted); line-height: 1.6; }
+
+/* FAQ */
+.faq-section { padding: 20px 32px 88px; }
+.faq-inner { max-width: 900px; margin: 0 auto; }
+.faq-list { margin: 20px 0; }
+.faq-item { border-bottom: 1px solid var(--border-light); overflow: hidden; }
+.faq-item:first-child { border-top: 1px solid var(--border-light); }
+.faq-question { width: 100%; background: none; border: none; display: flex; justify-content: space-between; align-items: flex-start; padding: 20px 0; cursor: pointer; gap: 16px; font-family: 'Geologica', sans-serif; font-size: 15px; font-weight: 500; color: var(--text); text-align: left; line-height: 1.4; transition: color 0.2s; }
+.faq-question:hover { color: var(--amber); }
+.faq-icon { font-size: 20px; flex-shrink: 0; color: var(--amber-mid); transition: transform 0.3s; font-family: 'Playfair Display', serif; }
+.faq-item.open .faq-icon { transform: rotate(45deg); }
+.faq-answer { font-size: 14px; color: var(--text-muted); line-height: 1.85; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s; padding-bottom: 0; font-weight: 300; }
+.faq-item.open .faq-answer { max-height: 500px; padding-bottom: 24px; }
+
+/* DISCLAIMER */
+.disclaimer { background: var(--bg-warm); border: 1px solid var(--border-light); padding: 22px 28px; margin: 0 32px 60px; max-width: 900px; margin-left: auto; margin-right: auto; font-size: 13px; color: var(--text-muted); line-height: 1.75; }
+
+/* FINAL CTA */
+.final-cta { background: var(--bg-dark); padding: 90px 32px; text-align: center; position: relative; overflow: hidden; }
+.final-cta::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 60% at 50% 0%, rgba(212,145,58,0.1) 0%, transparent 60%); pointer-events: none; }
+.final-cta-inner { position: relative; z-index: 1; max-width: 620px; margin: 0 auto; }
+.final-cta h2 { font-family: 'Playfair Display', serif; font-size: clamp(24px, 4vw, 36px); font-weight: 400; color: #f5f2eb; margin-bottom: 16px; line-height: 1.3; }
+.final-cta p { font-size: 15px; color: rgba(245,242,235,0.5); margin-bottom: 36px; }
+
+/* SHOCK STAT */
+.shock-stat { text-align: center; max-width: 620px; margin: 8px auto 8px; padding: 12px 24px 8px; }
+.shock-number { font-family: 'Playfair Display', serif; font-size: clamp(64px, 12vw, 112px); color: var(--amber); line-height: 1; margin-bottom: 20px; letter-spacing: -0.02em; }
+.shock-text { font-size: 16px; color: var(--text-body); line-height: 1.75; max-width: 480px; margin: 0 auto 14px; }
+.shock-source { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-light); }
+.shock-bar { max-width: 320px; margin: 0 auto 22px; height: 10px; border-radius: 6px; background: var(--bg-warm); border: 1px solid var(--border-light); overflow: hidden; }
+.shock-bar-fill { height: 100%; width: 70%; background: linear-gradient(90deg, var(--amber-mid), var(--amber-bright)); border-radius: 6px 0 0 6px; }
+
+/* LEVELS DIAGRAM */
+.levels-diagram { margin: 30px 0 8px; max-width: 640px; }
+.level-row { display: flex; align-items: stretch; gap: 18px; }
+.level-box { flex: 1; background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 12px; padding: 18px 22px; display: flex; align-items: center; gap: 16px; }
+.level-box.level-root { background: var(--amber-light); border-color: var(--amber-mid); }
+.level-num { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--border); flex-shrink: 0; width: 30px; }
+.level-box.level-root .level-num { color: var(--amber-border); }
+.level-title { font-size: 15.5px; font-weight: 500; color: var(--text); margin-bottom: 3px; font-family: 'Playfair Display', serif; }
+.level-text { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
+.level-tag { flex-shrink: 0; width: 128px; text-align: right; font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-light); }
+.level-tag-root { color: var(--amber); font-weight: 600; }
+.level-connector { width: 1px; height: 18px; background: var(--border); margin-left: 34px; }
+
+/* PRINCIPLES */
+.principles-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 28px 0 8px; }
+@media (max-width: 640px) { .principles-grid { grid-template-columns: 1fr; } }
+.principle-item { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 12px; padding: 22px 24px; }
+.principle-num { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--amber-border); margin-bottom: 8px; }
+.principle-title { font-size: 15.5px; font-weight: 500; color: var(--text); margin-bottom: 6px; font-family: 'Playfair Display', serif; }
+.principle-text { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+/* PROGRAM */
+.program-list { margin: 28px 0 8px; display: flex; flex-direction: column; gap: 16px; }
+.program-block { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; padding: 24px 26px; }
+.program-block-badge { display: inline-block; font-size: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; padding: 3px 10px; border-radius: 20px; margin-bottom: 12px; }
+.badge-both { background: var(--bg-warm); color: var(--text-muted); }
+.badge-one { background: var(--amber-light); color: var(--amber); }
+.badge-system, .stamp { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amber); border: 1.5px solid var(--amber); border-radius: 3px; padding: 3px 10px; transform: rotate(-2deg); background: transparent; }
+.program-block-tag { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--amber); margin-bottom: 8px; }
+.program-block-title { font-size: 17px; font-weight: 400; color: var(--text); margin-bottom: 10px; font-family: 'Playfair Display', serif; line-height: 1.35; }
+.program-block-result { font-size: 13.5px; color: var(--text-muted); line-height: 1.6; margin-bottom: 14px; }
+.program-block-result strong { color: var(--amber); font-weight: 600; }
+.program-block-body ul { list-style: none; padding-top: 10px; border-top: 1px solid var(--border-light); }
+.program-block-body li { font-size: 13px; color: var(--text-muted); padding: 5px 0 5px 16px; position: relative; }
+.program-block-body li::before { content: '-'; position: absolute; left: 0; color: var(--amber-border); }
+
+/* HYPNOGRAM */
+.hypnogram-box { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; padding: 24px 26px; margin: 24px 0 8px; }
+.hypnogram-row { margin-bottom: 22px; }
+.hypnogram-row:last-child { margin-bottom: 0; }
+.hypnogram-label { font-size: 12px; font-weight: 500; color: var(--text-muted); margin-bottom: 8px; display: flex; justify-content: space-between; }
+.hypnogram-label span.tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 10px; }
+.hypnogram-row.normal .tag { background: var(--bg-warm); color: var(--text-muted); }
+.hypnogram-row.disrupted .tag { background: var(--amber-light); color: var(--amber); }
+.hypnogram-bars { display: flex; gap: 3px; height: 60px; align-items: flex-end; }
+.hyp-bar { flex: 1; border-radius: 3px 3px 0 0; }
+.hyp-bar.stage-awake { height: 100%; background: #e29a6b; }
+.hyp-bar.stage-deep { height: 100%; background: var(--amber); }
+.hyp-bar.stage-rem { height: 65%; background: var(--amber-mid); }
+.hyp-bar.stage-light { height: 35%; background: var(--amber-border); }
+.hypnogram-hours { display: flex; gap: 3px; margin-top: 4px; }
+.hypnogram-hours span { flex: 1; font-size: 9px; color: var(--text-light); text-align: center; font-family: 'JetBrains Mono', monospace; }
+.hypnogram-legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 18px; font-size: 11px; color: var(--text-muted); }
+.hypnogram-legend span { display: flex; align-items: center; gap: 5px; }
+.hyp-dot { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
+.hypnogram-note { font-size: 11.5px; color: var(--text-light); margin-top: 14px; font-style: italic; }
+
+/* CAFFEINE CALCULATOR */
+.calc-box { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; padding: 26px 28px; margin: 24px 0 8px; }
+.calc-row { display: flex; gap: 14px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 18px; }
+.calc-field { display: flex; flex-direction: column; gap: 6px; }
+.calc-field label { font-size: 12px; color: var(--text-muted); }
+.calc-field input { font-family: 'JetBrains Mono', monospace; font-size: 15px; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); width: 120px; }
+.calc-field input:focus { outline: none; border-color: var(--amber-mid); }
+.calc-result { background: var(--amber-light); border-left: 4px solid var(--amber-mid); border-radius: 0 12px 12px 0; padding: 18px 22px; }
+.calc-result-num { font-family: 'Playfair Display', serif; font-size: 32px; color: var(--amber); margin-bottom: 6px; }
+.calc-result-text { font-size: 13.5px; color: var(--text); line-height: 1.55; }
+
+/* SCIENCE CARDS */
+.science-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 28px 0 20px; }
+@media (max-width: 860px) { .science-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .science-grid { grid-template-columns: 1fr; } }
+.science-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 12px; padding: 20px 20px 16px; }
+.science-fact { font-size: 13.5px; color: var(--text); line-height: 1.6; margin-bottom: 12px; }
+.science-source { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.03em; color: var(--text-muted); border: 1px dashed var(--border); border-radius: 4px; padding: 3px 9px; }
+.science-source::before { content: 'ДОСЬЕ · '; color: var(--amber); }
+.science-note { text-align: center; font-size: 12.5px; color: var(--text-light); font-style: italic; margin-top: 4px; }
+
+/* WHO FOR / NOT FOR */
+.who-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 28px 0 8px; }
+@media (max-width: 640px) { .who-grid { grid-template-columns: 1fr; } }
+.who-label { font-size: 13px; font-weight: 500; letter-spacing: 0.02em; margin-bottom: 14px; }
+.who-yes { color: var(--green); }
+.who-no { color: var(--red-soft); }
+.who-list { list-style: none; }
+.who-list li { display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--border-light); font-size: 13.5px; color: var(--text-body); line-height: 1.55; }
+.who-list li:last-child { border-bottom: none; }
+.who-icon { flex-shrink: 0; font-weight: 600; margin-top: 1px; }
+.who-icon.yes { color: var(--green); }
+.who-icon.no { color: var(--red-soft); }
+
+/* AUTHOR STORY */
+.author-story { max-width: 620px; margin: 24px 0 8px; }
+.author-story p { font-size: 15.5px; color: var(--text-body); line-height: 1.8; margin-bottom: 18px; }
+
+/* TESTIMONIALS */
+.testimonials { margin: 28px 0 8px; }
+.testimonial-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 16px; padding: 22px 24px; margin-bottom: 16px; transition: transform .25s ease, box-shadow .25s ease; }
+.testimonial-card:hover { transform: translateY(-4px); box-shadow: 0 18px 36px -18px rgba(44,44,42,.14); }
+.testi-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.testi-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--amber-light); border: 1.5px solid var(--amber-border); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 500; color: var(--amber); flex-shrink: 0; }
+.testi-meta { flex: 1; }
+.testi-name { font-size: 14px; font-weight: 500; color: var(--text); }
+.testi-detail { font-size: 12px; color: var(--text-light); }
+.testi-badge { font-size: 11px; background: var(--green-light); color: var(--green); border: 1px solid #C0DD97; border-radius: 20px; padding: 3px 10px; white-space: nowrap; }
+.testi-bubble { font-size: 14.5px; line-height: 1.65; color: var(--text); }
+.tg-label { font-size: 11px; color: var(--text-light); display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+.tg-dot { width: 6px; height: 6px; border-radius: 50%; background: #54A9EB; display: inline-block; }
+
+/* TWO FUTURES */
+.futures-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 28px 0 8px; }
+@media (max-width: 640px) { .futures-grid { grid-template-columns: 1fr; } }
+.futures-col { border-radius: 14px; padding: 26px 24px; }
+.futures-now { background: #faf5f5; border: 1px solid #F0959580; }
+.futures-then { background: #f5faf6; border: 1px solid #97C45980; }
+.futures-label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 18px; }
+.futures-now .futures-label { color: #A32D2D; }
+.futures-then .futures-label { color: #3B6D11; }
+.futures-item { margin-bottom: 16px; }
+.futures-item:last-child { margin-bottom: 0; }
+.futures-item-title { font-size: 13px; font-weight: 500; margin-bottom: 5px; }
+.futures-now .futures-item-title { color: #8B2A2A; }
+.futures-then .futures-item-title { color: #3B6D11; }
+.futures-item-text { font-size: 13.5px; line-height: 1.6; color: var(--text-body); }
+
+/* FOOTER */
+.site-footer { background: var(--bg-dark); padding: 28px 32px; text-align: center; }
+.footer-inner { max-width: 900px; margin: 0 auto; }
+.footer-legal, .footer-contact { font-size: 11.5px; color: rgba(245,242,235,0.35); line-height: 1.75; }
+
+/* STICKY MOBILE CTA */
+.sticky-cta { display: none; }
+@media (max-width: 640px) {
+  .sticky-cta { display: block; position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg-dark); padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); z-index: 50; box-shadow: 0 -8px 24px rgba(0,0,0,0.2); }
+  .sticky-cta-btn { display: block; text-align: center; background: var(--amber-bright); color: #fff; font-family: 'Geologica', sans-serif; font-weight: 600; font-size: 14px; padding: 14px; border-radius: 8px; text-decoration: none; }
+  body { padding-bottom: 66px; }
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-tag reveal"><span class="hero-tag-dot"></span>Протокол сна</div>
+    <h1 class="reveal reveal-1">У бессонницы <span class="count-num" data-target="4">0</span> причины. У тебя - одна.</h1>
+    <p class="hero-deck reveal reveal-2">Тест находит её за 12 вопросов. Дальше <strong>-</strong> только то, что решает именно твою причину.</p>
+    <div class="hero-proof reveal reveal-3"><span class="count-num" data-target="17">0</span> уроков &middot; тест на <span class="count-num" data-target="4">0</span> профиля &middot; доступ навсегда</div>
+    <div class="hero-btns"><a href="#pricing" class="btn-primary">Смотреть тарифы -&gt;</a></div>
+    <div class="hero-note">от 990 ₽ · одна оплата · без дедлайнов · доступ сразу после оплаты</div>
+  </div>
+</section>
+
+<div class="container">
+  <div class="section-label"><div class="section-line"></div><div class="section-text">Узнаёшь себя</div><div class="section-line"></div></div>
+  <div class="section-h2">Какая из четырёх - твоя?</div>
+  <p class="section-p">За каждым пунктом стоит свой физиологический механизм.</p>
+
+  <div class="test-grid">
+    <div class="test-card"><div class="test-card-title">Лежишь дольше 20 минут, мысли крутятся по кругу</div><div class="test-card-text">→ участок мозга не получает сигнал «отбой» - это не характер и не привычка</div></div>
+    <div class="test-card"><div class="test-card-title">Просыпаешься среди ночи, трудно уснуть снова</div><div class="test-card-text">→ сон постоянно рвётся на середине цикла, а не идёт единым потоком</div></div>
+    <div class="test-card"><div class="test-card-title">Просыпаешься за 1-2 часа до будильника</div><div class="test-card-text">→ кортизол поднимается раньше положенного - это сбитый ритм, не бессонница</div></div>
+    <div class="test-card"><div class="test-card-title">Спишь 7-8 часов, но встаёшь разбитым</div><div class="test-card-text">→ часы есть, а глубокого и REM-сна в нужной пропорции нет</div></div>
+  </div>
+  <p class="section-p" style="margin-top:20px">Похоже сразу на несколько пунктов? Тест «Профиль сна» находит твою за 12 вопросов. <span class="stamp" style="font-size:9px;padding:2px 8px;vertical-align:middle">Доступ: СИСТЕМА</span></p>
+
+  <div class="hypnogram-box">
+    <div class="hypnogram-row normal">
+      <div class="hypnogram-label">Нормальный цикл сна <span class="tag">глубокий сон в первой половине ночи</span></div>
+      <div class="hypnogram-bars">
+        <div class="hyp-bar stage-light"></div><div class="hyp-bar stage-deep"></div><div class="hyp-bar stage-deep"></div><div class="hyp-bar stage-light"></div><div class="hyp-bar stage-rem"></div><div class="hyp-bar stage-light"></div><div class="hyp-bar stage-deep"></div><div class="hyp-bar stage-rem"></div>
+      </div>
+      <div class="hypnogram-hours"><span>23:00</span><span>00</span><span>01</span><span>02</span><span>03</span><span>04</span><span>05</span><span>06:30</span></div>
+    </div>
+    <div class="hypnogram-row disrupted">
+      <div class="hypnogram-label">Сбитый цикл <span class="tag">частые пробуждения, почти нет глубокой фазы</span></div>
+      <div class="hypnogram-bars">
+        <div class="hyp-bar stage-light"></div><div class="hyp-bar stage-awake"></div><div class="hyp-bar stage-light"></div><div class="hyp-bar stage-awake"></div><div class="hyp-bar stage-light"></div><div class="hyp-bar stage-awake"></div><div class="hyp-bar stage-light"></div><div class="hyp-bar stage-awake"></div>
+      </div>
+      <div class="hypnogram-hours"><span>23:00</span><span>00</span><span>01</span><span>02</span><span>03</span><span>04</span><span>05</span><span>06:30</span></div>
+    </div>
+    <div class="hypnogram-legend">
+      <span><i class="hyp-dot" style="background:#e29a6b"></i>Пробуждение</span>
+      <span><i class="hyp-dot" style="background:var(--amber-mid)"></i>REM</span>
+      <span><i class="hyp-dot" style="background:var(--amber-border)"></i>Лёгкий сон</span>
+      <span><i class="hyp-dot" style="background:var(--amber)"></i>Глубокий сон</span>
+    </div>
+    <div class="hypnogram-note">Схематичная иллюстрация - не результат твоего теста. Разница в том, что при сбитом цикле глубокая фаза почти не наступает - именно она отвечает за физическое восстановление.</div>
+  </div>
+</div>
+
+
+<div class="container">
+  <div class="section-label"><div class="section-line"></div><div class="section-text">Подход</div><div class="section-line"></div></div>
+  <div class="section-h2">Здесь чинят механизм, а не мотивируют</div>
+  <ul class="who-list">
+    <li><span class="who-icon yes">✓</span><span><strong>Механика, не мотивация.</strong> Не «соберись», а конкретный физиологический механизм и протокол под него.</span></li>
+    <li><span class="who-icon yes">✓</span><span><strong>Свой темп.</strong> Все уроки открыты сразу - читаешь, когда удобно, а не по расписанию куратора.</span></li>
+    <li><span class="who-icon yes">✓</span><span><strong>15-20 минут на технику.</strong> Ничего не нужно менять кардинально за один день - протокол встраивается в вечер, какой есть.</span></li>
+    <li><span class="who-icon yes">✓</span><span><strong>Доступ навсегда.</strong> Материалы не пропадают и не сгорают - возвращаешься к ним, когда нужно.</span></li>
+  </ul>
+</div>
+
+<div class="container" data-tone-marker="dusk">
+  <div class="section-label"><div class="section-line"></div><div class="section-text">Цена одной ночи</div><div class="section-line"></div></div>
+  <div class="shock-stat">
+    <div class="shock-number">70%</div>
+    <div class="shock-bar"><div class="shock-bar-fill"></div></div>
+    <div class="shock-text">клеток-киллеров иммунной системы гибнет всего за одну ночь сна по 4 часа вместо 8 - эти клетки каждый день распознают и уничтожают раковые клетки в организме.</div>
+    <div class="shock-source">Michael Irwin, UCLA</div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="section-label"><div class="section-line"></div><div class="section-text">То, о чём не говорят</div><div class="section-line"></div></div>
+  <div class="section-h2">Почему общий совет не работает лично для тебя</div>
+  <p class="section-p" style="max-width:none">Статья выше объяснила механизмы. Но у бессонницы минимум четыре разных физиологических профиля - и общий совет закрывает от силы один из них. Дело не в том, что тебе врали. Дело в том, что говорить про конкретный профиль просто невыгодно - универсальный совет продаётся миллионам сразу, точная причина продаётся один раз, одному человеку. Пока причина не найдена, любое действие подбирается вслепую, даже самое научно обоснованное.</p>
+
+  <div class="calc-box">
+    <div class="section-label" style="margin-bottom:14px"><div class="section-line"></div><div class="section-text">Проверь на себе</div><div class="section-line"></div></div>
+    <p class="section-p" style="margin-bottom:16px">«Четвертьжизнь» кофеина - около 12 часов. Введи время последней чашки и время отбоя - посчитаем, сколько кофеина ещё будет в мозге.</p>
+    <div class="calc-row">
+      <div class="calc-field"><label>Последний кофеин</label><input type="time" id="calc-coffee" value="14:00"></div>
+      <div class="calc-field"><label>Время отбоя</label><input type="time" id="calc-sleep" value="23:00"></div>
+    </div>
+    <div class="calc-result">
+      <div class="calc-result-num" id="calc-result-num">~25%</div>
+      <div class="calc-result-text" id="calc-result-text">дозы кофеина ещё циркулирует в мозге в момент отбоя - сигнал усталости получает помеху, даже если засыпаешь без проблем.</div>
+    </div>
+  </div>
+</div>
+
+<div class="container" data-tone-marker="dawn">
+  <div class="section-label"><div class="section-line"></div><div class="section-text">Представь</div><div class="section-line"></div></div>
+  <div class="section-h2">Что меняется, когда причина найдена</div>
+  <div class="principles-grid">
+    <div class="principle-item">
+      <div class="principle-num">01</div>
+      <div class="principle-title">Тело</div>
+      <div class="principle-text">Просыпаешься от того, что выспался, а не от звука будильника. Тело лёгкое с первой минуты - будто наконец получило именно тот сон, в котором нуждалось.</div>
+    </div>
+    <div class="principle-item">
+      <div class="principle-num">02</div>
+      <div class="principle-title">Энергия</div>
+      <div class="principle-text">Энергии хватает на весь день, а не только до обеда. Вечером остаются силы на то, что действительно важно - а не только на то, чтобы доползти до дивана.</div>
+    </div>
+    <div class="principle-item">
+      <div class="principle-num">03</div>
+      <div class="principle-title">Голова</div>
+      <div class="principle-text">Мысли ясные, решения приходят быстро, без утреннего тумана. Голова работает так, как должна - а не как будто через слой ваты.</div>
+    </div>
+    <div class="principle-item">
+      <div class="principle-num">04</div>
+      <div class="principle-title">Отношения</div>
+      <div class="principle-text">Раздражение уходит вместе с причиной. Рядом с близкими снова тот человек, каким тебя знают, а не его истощённая версия.</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="section-label"><div class="section-line"></div><div class="section-text">Программа</div><div class="section-line"></div></div>
+  <div class="section-h2">Что забираешь на каждом шаге</div>
+  <p class="section-p">Не курс из 17 уроков подряд ради процесса - каждый блок даёт конкретный результат, который можно применить в тот же день.</p>
+  <div class="program-list">
+    <div class="program-block">
+      <span class="program-block-badge badge-both">Все тарифы &middot; тест только в СИСТЕМЕ</span>
+      <div class="program-block-tag">Старт и диагностика &middot; Урок 0</div>
+      <div class="program-block-title">Первый шаг уже сегодня - а в СИСТЕМЕ сразу ясно, с чего начинать именно тебе</div>
+      <div class="program-block-result">&rarr; Первый рабочий протокол применяешь в тот же вечер. В СИСТЕМЕ - плюс тест «Профиль сна», который <strong>экономит недели проб вслепую</strong>.</div>
+      <div class="program-block-body"><ul>
+        <li>Урок 0.1 - первый рабочий протокол (все тарифы)</li>
+        <li>Урок 0.2 - тест «Профиль сна», 4 профиля причины (только СИСТЕМА)</li>
+      </ul></div>
+    </div>
+    <div class="program-block">
+      <span class="program-block-badge badge-one">БАЗА и СИСТЕМА</span>
+      <div class="program-block-tag">Архитектура сна &middot; Уроки 1.1-1.3</div>
+      <div class="program-block-title">Сколько сна тебе реально нужно - и это не 8 часов для всех подряд</div>
+      <div class="program-block-result">&rarr; Перестаёшь ориентироваться на общую норму - узнаёшь <strong>свою фактическую потребность</strong> по фазам сна и глимфатической системе.</div>
+      <div class="program-block-body"><ul>
+        <li>Фазы сна: что происходит, пока ты спишь</li>
+        <li>Глимфатическая система: мозг моется</li>
+        <li>Сколько тебе реально нужно спать</li>
+      </ul></div>
+    </div>
+    <div class="program-block">
+      <span class="program-block-badge badge-one">БАЗА и СИСТЕМА</span>
+      <div class="program-block-tag">Циркадный ритм &middot; Уроки 2.1-2.3</div>
+      <div class="program-block-title">Свой хронотип и три рычага, которые двигают внутренние часы без будильника</div>
+      <div class="program-block-result">&rarr; <strong>Управляешь циркадным ритмом сознательно</strong> - светом, температурой, движением, а не ждёшь, пока организм сам подстроится.</div>
+      <div class="program-block-body"><ul>
+        <li>Хронотип: почему сова не ленится</li>
+        <li>Свет как главный дирижёр</li>
+        <li>Температура, еда, движение</li>
+      </ul></div>
+    </div>
+    <div class="program-block">
+      <span class="program-block-badge badge-both">Все тарифы</span>
+      <div class="program-block-tag">Что разрушает сон &middot; Уроки 3.1-3.3</div>
+      <div class="program-block-title">Кофеин, алкоголь и беспокойный ум - что из этого реально твой случай</div>
+      <div class="program-block-result">&rarr; Знаешь точное окно отсечки кофеина под себя и понимаешь, <strong>какая из причин реально твоя</strong>, а не борешься со всеми сразу.</div>
+      <div class="program-block-body"><ul>
+        <li>Кофеин и аденозин</li>
+        <li>Алкоголь, экраны, поздний спорт</li>
+        <li>Беспокойный ум ночью</li>
+      </ul></div>
+    </div>
+    <div class="program-block">
+      <span class="program-block-badge badge-one">СТАРТ (только CBT-I) &middot; БАЗА и СИСТЕМА целиком</span>
+      <div class="program-block-tag">Протоколы восстановления &middot; Уроки 4.1-4.4</div>
+      <div class="program-block-title">CBT-I - золотой стандарт лечения бессонницы, плюс протоколы под особые случаи</div>
+      <div class="program-block-result">&rarr; Получаешь <strong>клинически проверенный протокол</strong>, а не совет из интернета - плюс отдельные протоколы под джетлаг, дневной сон и вечерний ритуал.</div>
+      <div class="program-block-body"><ul>
+        <li>CBT-I: золотой стандарт восстановления сна</li>
+        <li>Особые случаи: джетлаг и сменный график</li>
+        <li>NSDR и дневной отдых</li>
+        <li>Вечерний ритуал и протокол пробуждения</li>
+      </ul></div>
+    </div>
+    <div class="program-block">
+      <span class="program-block-badge badge-system">Доступ: СИСТЕМА</span>
+      <div class="program-block-tag">Твоя система &middot; Уроки 5.1-5.2</div>
+      <div class="program-block-title">Всё собирается в один личный протокол - а не остаётся набором разрозненных советов</div>
+      <div class="program-block-result">&rarr; Выходишь не с курсом, который прошёл, а с <strong>рабочей системой под свою причину</strong> и трекером, который показывает разницу в цифрах.</div>
+      <div class="program-block-body"><ul>
+        <li>Собираем систему: четыре точки вмешательства</li>
+        <li>Финал: трекер, план на 30 дней, точка сравнения</li>
+      </ul></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="section-label"><div class="section-line"></div><div class="section-text">Научная основа</div><div class="section-line"></div></div>
+  <div class="section-h2">17 уроков - ни одного факта без источника</div>
+  <div class="science-grid">
+    <div class="science-card"><div class="science-fact">Кофеин не бодрит, а блокирует аденозиновые рецепторы - сигнал усталости не доходит до сознания, но сама усталость продолжает копиться.</div><div class="science-source">Matthew Walker · UC Berkeley</div></div>
+    <div class="science-card"><div class="science-fact">Мышам без гена меланопсина требуется почти месяц, чтобы подстроить внутренние часы под новый цикл свет/тьма - обычным мышам хватает недели.</div><div class="science-source">Satchin Panda · Институт Солка</div></div>
+    <div class="science-card"><div class="science-fact">Циркадные часы синхронизируются светом через супрахиазматическое ядро гипоталамуса - сбитый режим не даёт телу физического сигнала к засыпанию.</div><div class="science-source">Till R&ouml;nneberg · Мюнхенский университет</div></div>
+    <div class="science-card"><div class="science-fact">Субъективная сонливость падает быстрее объективной работоспособности - недосып перестаёт ощущаться, продолжая накапливаться.</div><div class="science-source">David Dinges · University of Pennsylvania</div></div>
+    <div class="science-card"><div class="science-fact">Долг сна не обнуляется одной длинной ночью - несколько ночей полноценного сна подряд не полностью восстанавливают работоспособность.</div><div class="science-source">Hans Van Dongen &amp; David Dinges · University of Pennsylvania</div></div>
+    <div class="science-card"><div class="science-fact">REM-сон снижает реактивность миндалевидного тела на пережитые за день эмоции.</div><div class="science-source">Els van der Helm, Matthew Walker · UC Berkeley</div></div>
+    <div class="science-card"><div class="science-fact">Алкоголь стабильно подавляет REM-сон уже начиная примерно с двух порций - вторая половина ночи становится прерывистой, даже если засыпание было лёгким.</div><div class="science-source">Метаанализ 27 исследований · Sleep Medicine Reviews, 2025</div></div>
+  </div>
+  <div class="science-note">Никаких утверждений без источника - 7 первоисточников легли в основу всех 17 уроков.</div>
+</div>
+
+<div class="container">
+  <div class="section-label"><div class="section-line"></div><div class="section-text">Кому подходит</div><div class="section-line"></div></div>
+  <div class="who-grid">
+    <div class="who-col">
+      <div class="who-label who-yes">Подойдёт, если</div>
+      <ul class="who-list">
+        <li><span class="who-icon yes">✓</span>Формально спишь 7-8 часов, но встаёшь разбитым</li>
+        <li><span class="who-icon yes">✓</span>Пробуешь общие советы про сон - не срабатывает</li>
+        <li><span class="who-icon yes">✓</span>Хочешь научную основу, а не «просто расслабься»</li>
+        <li><span class="who-icon yes">✓</span>Хочешь применять протокол самостоятельно, без куратора</li>
+      </ul>
+    </div>
+    <div class="who-col">
+      <div class="who-label who-no">Не подойдёт, если</div>
+      <ul class="who-list">
+        <li><span class="who-icon no">−</span>Диагностировано апноэ сна, биполярное расстройство или эпилепсия - сначала к врачу</li>
+        <li><span class="who-icon no">−</span>Нужен личный куратор и созвоны, а не самостоятельный курс</li>
+        <li><span class="who-icon no">−</span>Ищешь волшебную таблетку за один урок без применения на практике</li>
+        <li><span class="who-icon no">−</span>Бессонница острая и тяжёлая - это повод сначала обратиться к очному специалисту</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+  <div class="section-label"><div class="section-line"></div><div class="section-text">Через 30 дней</div><div class="section-line"></div></div>
+  <div class="section-h2">Разница видна в цифрах, а не на словах</div>
+  <div class="futures-grid">
+    <div class="futures-col futures-now">
+      <div class="futures-label">Сейчас</div>
+      <div class="futures-item"><div class="futures-item-title">Тело</div><div class="futures-item-text">Просыпается уже уставшим, будильник - единственный способ проснуться</div></div>
+      <div class="futures-item"><div class="futures-item-title">Энергия</div><div class="futures-item-text">К вечеру пусто, выходные не восстанавливают, отпуск помогает на неделю</div></div>
+      <div class="futures-item"><div class="futures-item-title">Голова</div><div class="futures-item-text">Разбираешься с проблемой наугад, пробуя советы по одному</div></div>
+    </div>
+    <div class="futures-col futures-then">
+      <div class="futures-label">Через 30 дней</div>
+      <div class="futures-item"><div class="futures-item-title">Тело</div><div class="futures-item-text">Знаешь свой профиль и действуешь по нему, а не наугад</div></div>
+      <div class="futures-item"><div class="futures-item-title">Энергия</div><div class="futures-item-text">Энергия ровнее в течение дня, не только рывками после кофе</div></div>
+      <div class="futures-item"><div class="futures-item-title">Голова</div><div class="futures-item-text">Сравниваешь баллы теста на старте и через 30 дней - разница видна в цифрах</div></div>
+    </div>
+  </div>
+</div>
+
+
+<section class="pricing-section" id="pricing">
+  <div class="pricing-inner">
+    <div class="section-label"><div class="section-line"></div><div class="section-text">Тарифы</div><div class="section-line"></div></div>
+
+    <div class="price-anchor">
+      <div class="price-anchor-text">Консультация сомнолога в Москве - <s>от 3 850 ₽</s> за один приём.<br>Протокол сна: Система - <strong>5 990 ₽ навсегда.</strong> Не один приём, а протокол, который работает на тебя каждую ночь - навсегда.</div>
+    </div>
+
+    <div class="pricing-desc"><strong>В чём разница между тарифами.</strong> СТАРТ и БАЗА - уроки без диагностики, узкий и более полный вход соответственно. СИСТЕМА - с тестом на причину и персональным маршрутом по своему профилю. Если хочешь весь курс целиком плюс точную причину под него, а не узкий вход, - это СИСТЕМА.</div>
+
+    <div class="pricing-grid">
+      <div class="pricing-card plain">
+        <div class="pricing-card-head">
+          <div class="pricing-badge plain">СТАРТ</div>
+          <div class="pricing-name">Протокол сна: Старт</div>
+          <div class="pricing-tagline">5 уроков: что разрушает сон (кофеин, алкоголь, беспокойный ум) + CBT-I - золотой стандарт лечения бессонницы. Без диагностики причины.</div>
+          <div class="pricing-price">990 ₽</div>
+          <div class="pricing-price-note">одна оплата · доступ навсегда</div>
+        </div>
+        <div class="pricing-card-body">
+          <ul class="pricing-features">
+            <li><span class="feat-yes">✓</span>5 уроков: разрушители сна + CBT-I</li>
+            <li><span class="feat-yes">✓</span>Доступ в Telegram навсегда</li>
+            <li><span class="feat-no">-</span>Диагностика причины (тест)</li>
+            <li><span class="feat-no">-</span>Персональный маршрут</li>
+            <li><span class="feat-no">-</span>30-дневный трекер</li>
+          </ul>
+          <a href="https://payform.ru/5vcuLqI/" class="pricing-btn plain">Получить СТАРТ -&gt;</a>
+        </div>
+      </div>
+
+      <div class="pricing-card plain">
+        <div class="pricing-card-head">
+          <div class="pricing-badge plain">БАЗА</div>
+          <div class="pricing-name">Протокол сна: База</div>
+          <div class="pricing-tagline">14 уроков: архитектура сна, циркадный ритм, что разрушает сон, протоколы восстановления - весь курс без модуля сборки и диагностики.</div>
+          <div class="pricing-price">2 990 ₽</div>
+          <div class="pricing-price-note">одна оплата · доступ навсегда</div>
+        </div>
+        <div class="pricing-card-body">
+          <ul class="pricing-features">
+            <li><span class="feat-yes">✓</span>14 уроков: сон, ритм, разрушители, восстановление</li>
+            <li><span class="feat-yes">✓</span>Доступ в Telegram навсегда</li>
+            <li><span class="feat-no">-</span>Диагностика причины (тест)</li>
+            <li><span class="feat-no">-</span>Персональный маршрут</li>
+            <li><span class="feat-no">-</span>30-дневный трекер</li>
+          </ul>
+          <a href="https://payform.ru/elcuLvl/" class="pricing-btn plain">Получить БАЗУ -&gt;</a>
+        </div>
+      </div>
+
+      <div class="pricing-card featured">
+        <div class="pricing-badge popular">Рекомендуем</div>
+        <div class="pricing-card-head">
+          <div class="pricing-badge featured">СИСТЕМА</div>
+          <div class="pricing-name">Протокол сна: Система</div>
+          <div class="pricing-tagline">БАЗА + тест «Профиль сна», который показывает, какая техника - включая CBT-I - решает именно твою причину, + модуль 5 (сборка протокола + 30-дневный трекер) + 4 бонуса.</div>
+          <div class="pricing-price">5 990 ₽</div>
+          <div class="pricing-price-note">одна оплата · доступ навсегда</div>
+        </div>
+        <div class="pricing-card-body">
+          <ul class="pricing-features">
+            <li><span class="feat-yes">✓</span>Тест «Профиль сна» (4 профиля)</li>
+            <li><span class="feat-yes">✓</span>Все 17 уроков + сборка личного протокола</li>
+            <li><span class="feat-yes">✓</span>PDF-бланк отчёта по тесту</li>
+            <li><span class="feat-yes">✓</span>30-дневный PDF-трекер</li>
+            <li><span class="feat-yes">✓</span>4 бонуса</li>
+          </ul>
+          <a href="https://payform.ru/jecuLxT/" class="pricing-btn featured">Получить СИСТЕМУ -&gt;</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="pricing-safety">
+      <span>🔒 Безопасная оплата</span><span class="pricing-safety-dot"></span>
+      <span>Telegram-доступ сразу после оплаты</span><span class="pricing-safety-dot"></span>
+      <span>Доступ навсегда</span>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <div class="section-label"><div class="section-line"></div><div class="section-text">Бонусы Системы</div><div class="section-line"></div></div>
+  <div style="text-align:center; margin-bottom:20px"><span class="stamp">Доступ: СИСТЕМА</span></div>
+  <div class="bonus-list">
+    <div class="bonus-item"><div class="bonus-num">01</div><div><div class="bonus-title">«Скорая помощь: не спал вообще, а завтра важный день»</div><div class="bonus-text">К уроку 4.3. Готовый план на утро вместо паники и второй бессонной ночи от тревоги за первую.</div></div></div>
+    <div class="bonus-item"><div class="bonus-num">02</div><div><div class="bonus-title">PDF-бланк отчёта по тесту «Профиль сна»</div><div class="bonus-text">Разбор каждого профиля с конкретными действиями под него - находишь свой и сверяешься с ним.</div></div></div>
+    <div class="bonus-item"><div class="bonus-num">03</div><div><div class="bonus-title">«Когда у партнёров разные хронотипы»</div><div class="bonus-text">К уроку 2.1. Что делать, если сбит режим не только у тебя.</div></div></div>
+    <div class="bonus-item"><div class="bonus-num">04</div><div><div class="bonus-title">Джетлаг-калькулятор</div><div class="bonus-text">К уроку 4.2. Расчёт адаптации под конкретную поездку.</div></div></div>
+  </div>
+</div>
+
+<section class="faq-section">
+  <div class="faq-inner">
+    <div class="section-label"><div class="section-line"></div><div class="section-text">Вопросы</div><div class="section-line"></div></div>
+    <div class="faq-list">
+      <div class="faq-item"><button class="faq-question">Чем это отличается от обычного курса про сон? <span class="faq-icon">+</span></button><div class="faq-answer">Обычный курс даёт один список советов всем подряд. Здесь сначала находится причина - одна из четырёх, - и дальше идут только действия под неё, а не двадцать общих рекомендаций на все случаи разом.</div></div>
+      <div class="faq-item"><button class="faq-question">Уже пробовала расстановки, дыхательные практики, отказ от кофе - почему тут будет иначе? <span class="faq-icon">+</span></button><div class="faq-answer">Потому что каждый раз это было направлено на всё сразу, а не на конкретную причину. Сначала находится, какая из четырёх причин активна, и дальше - только действия под неё.</div></div>
+      <div class="faq-item"><button class="faq-question">В чём разница между тарифами? <span class="faq-icon">+</span></button><div class="faq-answer">СТАРТ и БАЗА - уроки без диагностики, узкий и более полный вход соответственно. СИСТЕМА - с тестом на причину и персональным маршрутом по своему профилю. Если хочешь весь курс целиком плюс точную причину под него, а не узкий вход, - это СИСТЕМА.</div></div>
+      <div class="faq-item"><button class="faq-question">Как понять, что это не эзотерика под видом науки? <span class="faq-icon">+</span></button><div class="faq-answer">Каждый из 17 уроков - с именем исследователя, университетом и годом: Уолкер, Панда, Рённеберг, Динджес. Не общие слова, а источник, который можно перепроверить самостоятельно.</div></div>
+      <div class="faq-item"><button class="faq-question">Я хожу на терапию - стоит ли брать курс? <span class="faq-icon">+</span></button><div class="faq-answer">Терапия и курс работают на разных уровнях. Терапия хорошо работает с тем, что происходит в сознании - историей, эмоциональной регуляцией через разговор. Курс закрывает физиологический слой: циркадный сбой, накопленный долг сна, тело в режиме тревоги - то, до чего разговорные методы не добираются в принципе. Одно другое не заменяет.</div></div>
+      <div class="faq-item"><button class="faq-question">Как получить доступ после оплаты? <span class="faq-icon">+</span></button><div class="faq-answer">Сразу после оплаты приходит доступ в закрытый Telegram-канал. Если письма нет - проверь папку «Спам» или «Промоакции», иногда попадает туда. Весь контент открыт сразу - идёшь в своём темпе, возвращаешься когда захочешь. Доступ навсегда, без дедлайнов.</div></div>
+      <div class="faq-item"><button class="faq-question">Сколько времени нужно уделять курсу? <span class="faq-icon">+</span></button><div class="faq-answer">15-20 минут в день на практику - не нужно перестраивать весь вечер под курс. Уроки открыты сразу, читаешь в своём темпе: можно за один присест, можно растянуть на пару недель.</div></div>
+      <div class="faq-item"><button class="faq-question">Почему тест есть только в СИСТЕМЕ, а не во всех тарифах? <span class="faq-icon">+</span></button><div class="faq-answer">Тест «Профиль сна» - это не просто ещё один урок, а отдельная работа: анализ твоих ответов и сборка персонального маршрута по всем 17 урокам под твою причину. Это самая трудоёмкая часть продукта, поэтому она идёт в тарифе, где есть всё остальное - в СИСТЕМЕ.</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="disclaimer">Курс не заменяет консультацию врача, психотерапию или лечение при клинических нарушениях сна и не подходит при тяжёлых травматичных состояниях - если нарушения сна долгие и сильные, лучше начать с очного специалиста. Курс не даёт гарантированного результата в конкретные сроки - это система самостоятельной работы, а не медицинская процедура.</div>
+
+<section class="final-cta">
+  <div class="final-cta-inner">
+    <div class="shock-number" style="font-size:clamp(48px,8vw,72px);margin-bottom:12px">70%</div>
+    <p style="color:rgba(245,242,235,0.6);font-size:14px;margin-bottom:28px">клеток-киллеров иммунной системы гибнет за одну ночь сна по 4 часа вместо 8 - Michael Irwin, UCLA</p>
+    <h2>Причина у сна - своя.<br>Общий совет её не находит, тест - находит.</h2>
+    <p>Тест на 4 профиля · персональный маршрут · проверка через 30 дней</p>
+    <a href="#pricing" class="btn-primary">Получить СИСТЕМУ и найти свою причину -&gt;</a>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-legal">ИП Гладько Инна Валерьевна · ИНН: 241104537970 · ОГРНИП: 325246800094256</div>
+    <div class="footer-contact">Поддержка: Telegram <a href="https://t.me/bodycodelab_support" style="color:inherit">@bodycodelab_support</a></div>
+  </div>
+</footer>
+
+<div class="sticky-cta">
+  <a href="#pricing" class="sticky-cta-btn">Смотреть тарифы -&gt;</a>
+</div>
+
+<script>
+function updateCaffeineCalc(){
+  var coffeeEl = document.getElementById('calc-coffee');
+  var sleepEl = document.getElementById('calc-sleep');
+  var numEl = document.getElementById('calc-result-num');
+  var textEl = document.getElementById('calc-result-text');
+  if (!coffeeEl || !sleepEl) return;
+  var c = coffeeEl.value.split(':'); var s = sleepEl.value.split(':');
+  if (c.length < 2 || s.length < 2) return;
+  var coffeeMin = parseInt(c[0]) * 60 + parseInt(c[1]);
+  var sleepMin = parseInt(s[0]) * 60 + parseInt(s[1]);
+  var diffMin = sleepMin - coffeeMin;
+  if (diffMin < 0) diffMin += 24 * 60;
+  var hours = diffMin / 60;
+  var remaining = Math.pow(0.5, hours / 12) * 100;
+  var pct = Math.max(1, Math.round(remaining));
+  numEl.textContent = '~' + pct + '%';
+  if (pct >= 40) {
+    textEl.textContent = 'дозы кофеина ещё циркулирует в мозге в момент отбоя - это заметно мешает глубокому сну, даже если засыпаешь без проблем.';
+  } else if (pct >= 15) {
+    textEl.textContent = 'дозы кофеина ещё циркулирует в мозге в момент отбоя - сигнал усталости получает помеху, даже если засыпаешь без проблем.';
+  } else {
+    textEl.textContent = 'дозы кофеина остаётся в мозге к отбою - на этот механизм жаловаться, скорее всего, не приходится.';
+  }
+}
+document.getElementById('calc-coffee') && document.getElementById('calc-coffee').addEventListener('input', updateCaffeineCalc);
+document.getElementById('calc-sleep') && document.getElementById('calc-sleep').addEventListener('input', updateCaffeineCalc);
+updateCaffeineCalc();
+
+if ('IntersectionObserver' in window) {
+  var toneMarkers = document.querySelectorAll('[data-tone-marker]');
+  var toneIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) {
+        document.body.setAttribute('data-tone', e.target.getAttribute('data-tone-marker'));
+      }
+    });
+  }, { rootMargin: '-40% 0px -40% 0px' });
+  toneMarkers.forEach(function(m){ toneIO.observe(m); });
+}
+
+document.querySelectorAll('.faq-question').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var item = btn.closest('.faq-item');
+    var wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(function(i){ i.classList.remove('open'); });
+    if(!wasOpen){ item.classList.add('open'); }
+  });
+});
+
+/* bonuses and FAQ render statically - no scroll-pop, easier to scan a list */
+
+var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if('IntersectionObserver' in window && !reduceMotion){
+  var revealIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); revealIO.unobserve(e.target); }
+    });
+  }, {threshold:0.15, rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ revealIO.observe(el); });
+} else {
+  document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+}
+
+/* count-up для цифр */
+function countUp(el){
+  var target = parseInt(el.getAttribute('data-target'), 10);
+  var dur = 900, start = null;
+  function step(ts){
+    if(!start) start = ts;
+    var p = Math.min((ts - start) / dur, 1);
+    el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+    if(p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+if(!reduceMotion && 'IntersectionObserver' in window){
+  var countIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ countUp(e.target); countIO.unobserve(e.target); }
+    });
+  }, {threshold:0.6});
+  document.querySelectorAll('.count-num').forEach(function(el){ countIO.observe(el); });
+} else {
+  document.querySelectorAll('.count-num').forEach(function(el){ el.textContent = el.getAttribute('data-target'); });
+}
+</script>
+</body>
+</html>
