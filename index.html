@@ -311,6 +311,13 @@ body[data-tone="dawn"] { background: #faf3e6; }
 .review-head { font-size: 14px; }
 .review-ctx { font-size: 13px; color: var(--text-muted, #5F5E5A); }
 .review-res { align-self: flex-start; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--amber, #854F0B); background: var(--amber-light, #FAEEDA); border-radius: 999px; padding: 3px 10px; }
+.my-night { display: none; border: 1px solid var(--amber-border); background: var(--amber-light); border-radius: 14px; padding: 18px 20px; margin: 0 0 28px; }
+.my-night.on { display: block; }
+.my-night-label { font: 11px 'JetBrains Mono', monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--amber); margin-bottom: 6px; }
+.my-night-title { font-family: 'Playfair Display', Georgia, serif; font-size: 22px; margin-bottom: 6px; }
+.my-night-text { font-size: 15px; line-height: 1.6; color: var(--text); }
+.test-card.for-you, .program-block.for-you { outline: 2px solid var(--amber-mid); outline-offset: 2px; }
+.for-you-tag { display: inline-block; font: 11px 'JetBrains Mono', monospace; color: #fff; background: var(--amber); border-radius: 999px; padding: 2px 9px; margin-bottom: 8px; }
 </style>
 </head>
 <body>
@@ -328,6 +335,7 @@ body[data-tone="dawn"] { background: #faf3e6; }
 </section>
 
 <div class="container">
+  <div class="my-night" id="my-night"><div class="my-night-label">Твой результат из статьи</div><div class="my-night-title" id="my-night-title"></div><div class="my-night-text" id="my-night-text"></div></div>
   <div class="section-label"><div class="section-line"></div><div class="section-text">Узнаёшь себя</div><div class="section-line"></div></div>
   <div class="section-h2">Где ломается твоя ночь?</div>
   <p class="section-p">Четыре способа, которыми ночная смена не доходит до конца. За каждым свой механизм</p>
@@ -759,6 +767,34 @@ if('IntersectionObserver' in window && !reduceMotion){
 } else {
   document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
 }
+
+
+/* Результат мини-теста из статьи: метка #p-a / #p-b / #p-v / #p-g или сохранённый выбор */
+(function(){
+  var P = {
+    a: { t: 'Твоя ночь ломается так: смена не начинается', x: 'Голова не выключается, и ночь стартует с опозданием. Твои уроки - беспокойный ум и CBT-I, они подсвечены в программе ниже', card: 0, blocks: [3, 4] },
+    b: { t: 'Твоя ночь ломается так: смену прерывают', x: 'Сон рвётся, и ночь не успевает пройти полные циклы. Твои уроки - температура, еда, алкоголь и экраны, они подсвечены в программе ниже', card: 1, blocks: [2, 3] },
+    v: { t: 'Твоя ночь ломается так: смену обрывают рано', x: 'Ранний подъём срезает конец ночи, где больше всего быстрого сна. Твои уроки - циркадный ритм и свет, они подсвечены в программе ниже', card: 2, blocks: [2] },
+    g: { t: 'Твоя ночь ломается так: смена идёт вхолостую', x: 'Часы есть, а глубины нет. Твои уроки - архитектура сна и то, что его разрушает, они подсвечены в программе ниже', card: 3, blocks: [1, 3] }
+  };
+  var m = (location.hash || '').match(/^#p-([abvg])$/), key = m ? m[1] : null;
+  if (!key) { try { key = localStorage.getItem('son_profile'); } catch(e) {} }
+  if (!key || !P[key]) return;
+  try { localStorage.setItem('son_profile', key); } catch(e) {}
+  var p = P[key], box = document.getElementById('my-night');
+  document.getElementById('my-night-title').textContent = p.t;
+  document.getElementById('my-night-text').textContent = p.x;
+  box.classList.add('on');
+  var cards = document.querySelectorAll('.test-card');
+  if (cards[p.card]) cards[p.card].classList.add('for-you');
+  var blocks = document.querySelectorAll('.program-block');
+  p.blocks.forEach(function(i){
+    var b = blocks[i]; if (!b) return;
+    b.classList.add('for-you');
+    var tag = document.createElement('div'); tag.className = 'for-you-tag'; tag.textContent = 'для твоей ночи';
+    b.insertBefore(tag, b.firstChild);
+  });
+})();
 
 /* count-up для цифр */
 function countUp(el){

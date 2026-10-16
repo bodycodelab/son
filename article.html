@@ -244,6 +244,24 @@
  @keyframes breathe { 0%,100% { opacity: .5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
  @media (prefers-reduced-motion: reduce) { .reveal{opacity:1!important;transform:none!important;transition:none!important} .header-glow{animation:none} .research-block{transition:none} }
  .testi-result { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--amber); background:var(--amber-light); border-radius:999px; padding:3px 10px; margin:0 0 10px; }
+ .nightmap { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 12px; padding: 22px 20px; margin: 28px 0; }
+ .nightmap-title { font-family: 'Playfair Display', Georgia, serif; font-size: 20px; margin-bottom: 4px; }
+ .nightmap-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 16px; }
+ .nightmap-inputs { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+ .nightmap-inputs label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: .05em; }
+ .nightmap-inputs input { font: 500 18px 'Geologica', sans-serif; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); min-width: 0; }
+ .nm-strip { display: flex; height: 46px; border-radius: 8px; overflow: hidden; }
+ .nm-seg { height: 100%; }
+ .nm-seg.light { background: var(--amber-border); }
+ .nm-seg.deep { background: var(--amber); }
+ .nm-seg.rem { background: var(--amber-mid); }
+ .nm-seg.cut { opacity: .22; background-image: repeating-linear-gradient(45deg, rgba(0,0,0,.35) 0 2px, transparent 2px 7px); }
+ .nm-hours { display: flex; justify-content: space-between; font: 11px 'JetBrains Mono', monospace; color: var(--text-light); margin-top: 6px; }
+ .nm-legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--text-muted); margin-top: 12px; }
+ .nm-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+ .nm-result { margin-top: 18px; padding: 16px 18px; border-radius: 10px; background: var(--amber-light); font-size: 16px; line-height: 1.55; }
+ .nm-result b { color: var(--amber); }
+ .nm-src { font: 11px 'JetBrains Mono', monospace; color: var(--text-light); margin-top: 10px; }
 </style>
 </head>
 <body>
@@ -332,6 +350,19 @@
  <div class="research-label">Ключевое исследование</div>
  <div class="research-text">У здорового взрослого 13-23% ночи занимает глубокий медленный сон и 20-25% - быстрый. Глубокий собран в начале ночи, быстрый - ближе к утру</div>
  <div class="research-source">Carskadon M., Dement W. &middot; Principles and Practice of Sleep Medicine</div>
+ </div>
+ <div class="nightmap" id="nightmap">
+ <div class="nightmap-title">Карта твоей ночи</div>
+ <div class="nightmap-sub">Введи, во сколько обычно засыпаешь и во сколько звонит будильник</div>
+ <div class="nightmap-inputs">
+ <label for="nm-bed">Засыпаю<input type="time" id="nm-bed" value="23:30"></label>
+ <label for="nm-wake">Подъём<input type="time" id="nm-wake" value="06:30"></label>
+ </div>
+ <div class="nm-strip" id="nm-strip"></div>
+ <div class="nm-hours" id="nm-hours"></div>
+ <div class="nm-legend"><span><i style="background:var(--amber)"></i>Глубокий сон: ремонт тела</span><span><i style="background:var(--amber-mid)"></i>Быстрый сон: разбор эмоций</span><span><i style="background:var(--amber-border)"></i>Лёгкий сон</span><span><i style="background:var(--border)"></i>Срезано будильником</span></div>
+ <div class="nm-result" id="nm-result"></div>
+ <div class="nm-src">Расчёт по средней архитектуре сна взрослого: циклы по 90 минут, полная ночь 8 часов · Carskadon &amp; Dement</div>
  </div>
  <div class="recognize-list">
  <div class="recognize-item"><div class="recognize-icon"></div>Ложишься после полуночи, а встаёшь по будильнику в семь</div>
@@ -669,6 +700,61 @@ function showSonResult(key) {
   document.getElementById('quiz-result-title').textContent = r.title;
   document.getElementById('quiz-result-text').textContent = r.text;
   document.getElementById('quiz-result').classList.add('visible');
+  sonRememberProfile(key);
+}
+/* Карта ночи: средняя архитектура сна взрослого, полная ночь 8 часов */
+(function(){
+  var bedEl = document.getElementById('nm-bed'), wakeEl = document.getElementById('nm-wake');
+  if (!bedEl || !wakeEl) return;
+  var CYCLE = 90, FULL = 480;
+  var DEEP = [0.40, 0.30, 0.15, 0.05, 0, 0];
+  var REM  = [0.10, 0.15, 0.25, 0.35, 0.40, 0.45];
+  function mins(v){ var p = v.split(':'); return parseInt(p[0],10)*60 + parseInt(p[1],10); }
+  function fmt(m){ m = ((m % 1440) + 1440) % 1440; var h = Math.floor(m/60), mm = m % 60; return (h<10?'0':'')+h+':'+(mm<10?'0':'')+mm; }
+  function segs(){
+    var out = [], t = 0, i = 0;
+    while (t < FULL) {
+      var d = DEEP[Math.min(i,5)]*CYCLE, r = REM[Math.min(i,5)]*CYCLE, l = CYCLE - d - r;
+      [['light', l*0.5], ['deep', d], ['light', l*0.5], ['rem', r]].forEach(function(s){
+        if (s[1] <= 0 || t >= FULL) return;
+        var len = Math.min(s[1], FULL - t); out.push({type:s[0], start:t, len:len}); t += len;
+      });
+      i++;
+    }
+    return out;
+  }
+  var ALL = segs();
+  function total(type, upto){ return ALL.reduce(function(a,s){ if (s.type!==type) return a; var e = Math.min(s.start+s.len, upto); return a + Math.max(0, e - s.start); }, 0); }
+  function render(){
+    var bed = mins(bedEl.value || '23:30'), wake = mins(wakeEl.value || '06:30');
+    var dur = wake - bed; if (dur <= 0) dur += 1440;
+    var strip = document.getElementById('nm-strip'); strip.innerHTML = '';
+    ALL.forEach(function(s){
+      var slept = Math.max(0, Math.min(s.len, dur - s.start));
+      if (slept > 0) { var a = document.createElement('div'); a.className = 'nm-seg '+s.type; a.style.width = (slept/FULL*100)+'%'; strip.appendChild(a); }
+      if (s.len - slept > 0) { var b = document.createElement('div'); b.className = 'nm-seg '+s.type+' cut'; b.style.width = ((s.len-slept)/FULL*100)+'%'; strip.appendChild(b); }
+    });
+    document.getElementById('nm-hours').innerHTML = '<span>'+fmt(bed)+'</span><span>'+fmt(bed+240)+'</span><span>'+fmt(bed+480)+'</span>';
+    var remFull = total('rem', FULL), deepFull = total('deep', FULL);
+    var remCut = Math.round((1 - total('rem', dur)/remFull)*100), deepCut = Math.round((1 - total('deep', dur)/deepFull)*100);
+    var res = document.getElementById('nm-result'), txt;
+    if (dur >= FULL) {
+      txt = 'Твоя ночь успевает пройти все циклы. Если утром всё равно нет сил, смена, скорее всего, идёт вхолостую: часы есть, а глубины нет. Это механизмы 03 и 05';
+    } else {
+      txt = 'Твой подъём в <b>'+fmt(wake)+'</b> срезает конец ночи: примерно <b>'+remCut+'% быстрого сна</b>, а в нём мозг разбирает эмоции дня. ';
+      txt += deepCut >= 10 ? 'И ещё <b>'+deepCut+'% глубокого</b>, где чинится тело. ' : 'Глубокий сон почти цел: он собран в начале ночи. ';
+      txt += 'Отсюда вчерашняя тревога, которая встречает утром';
+    }
+    if (bed >= 60 && bed < 360) txt += '. А отбой после часа ночи сдвигает и глубокую фазу: её время привязано к внутренним часам';
+    res.innerHTML = txt;
+  }
+  bedEl.addEventListener('input', render); wakeEl.addEventListener('input', render); render();
+})();
+
+/* Передаём выбранный профиль на лендинг меткой после # */
+function sonRememberProfile(key){
+  try { localStorage.setItem('son_profile', key); } catch(e) {}
+  document.querySelectorAll('a.cta-btn').forEach(function(a){ a.href = a.href.split('#')[0] + '#p-' + key; });
 }
 </script>
 </body>
