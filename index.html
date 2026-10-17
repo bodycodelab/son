@@ -319,6 +319,46 @@ body[data-tone="dawn"] { background: #faf3e6; }
 .test-card.for-you, .program-block.for-you { outline: 2px solid var(--amber-mid); outline-offset: 2px; }
 .for-you-tag { display: inline-block; font: 11px 'JetBrains Mono', monospace; color: #fff; background: var(--amber); border-radius: 999px; padding: 2px 9px; margin-bottom: 8px; }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "Протокол сна",
+  "description": "Мозг не домывается, тело не чинится, вчерашняя тревога ждёт утром. Протокол сна: 17 уроков и тест на 4 способа, которыми ломается ночь",
+  "url": "https://bodycodelab.github.io/son/",
+  "image": "https://bodycodelab.github.io/son/cover-son-index.jpg",
+  "inLanguage": "ru",
+  "provider": {
+    "@type": "Organization",
+    "name": "ИП Гладько Инна Валерьевна",
+    "url": "https://bodycodelab.github.io/son/"
+  },
+  "hasCourseInstance": {
+    "@type": "CourseInstance",
+    "courseMode": "online"
+  },
+  "offers": [
+    {
+      "@type": "Offer",
+      "name": "Протокол сна: База",
+      "price": "1990",
+      "priceCurrency": "RUB",
+      "availability": "https://schema.org/InStock",
+      "category": "Paid",
+      "url": "https://bodycodelab.github.io/son/#pricing"
+    },
+    {
+      "@type": "Offer",
+      "name": "Протокол сна: Система",
+      "price": "3990",
+      "priceCurrency": "RUB",
+      "availability": "https://schema.org/InStock",
+      "category": "Paid",
+      "url": "https://bodycodelab.github.io/son/#pricing"
+    }
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -403,7 +443,7 @@ body[data-tone="dawn"] { background: #faf3e6; }
   <div class="section-h2">Индустрия сна продаёт засыпание</div>
   <p class="section-p" style="max-width:none">Мелатонин, приложения, шумы, маски. Засыпание легко почувствовать и легко продать. А то, что происходит после него, не видно, и про это молчат. Пока ночь не делает свою работу, любое средство для засыпания помогает только войти в неё. Дело не в том, что тебе врали. Дело в том, что чинят не то место</p>
 
-  <div class="calc-box">
+  <div class="calc-box" id="calc">
     <div class="section-label" style="margin-bottom:14px"><div class="section-line"></div><div class="section-text">Проверь на себе</div><div class="section-line"></div></div>
     <p class="section-p" style="margin-bottom:16px">«Четвертьжизнь» кофеина - около 12 часов. Введи время последней чашки и время отбоя - посчитаем, сколько кофеина ещё будет в мозге.</p>
     <div class="calc-row">
@@ -444,7 +484,7 @@ body[data-tone="dawn"] { background: #faf3e6; }
   </div>
 </div>
 
-<div class="container">
+<div class="container" id="program">
   <div class="section-label"><div class="section-line"></div><div class="section-text">Программа</div><div class="section-line"></div></div>
   <div class="section-h2">Что забираешь на каждом шаге</div>
   <p class="section-p">Не курс из 17 уроков подряд ради процесса - каждый блок даёт конкретный результат, который можно применить в тот же день.</p>
