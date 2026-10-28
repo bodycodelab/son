@@ -19,18 +19,6 @@
 <meta name="twitter:title" content="Ты спишь. А ночь не делает свою работу">
 <meta name="twitter:description" content="Мозг не домывается, тело не чинится, вчерашняя тревога ждёт утром. Протокол сна: 17 уроков и тест на 4 способа, которыми ломается ночь. От 1 990 ₽.">
 <meta name="twitter:image" content="https://bodycodelab.github.io/son/cover-son-index.jpg">
-<!-- Yandex.Metrika counter -->
-<script type="text/javascript" >
-   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-   m[i].l=1*new Date();
-   for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-   k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-   (window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=112328528', 'ym');
-
-   ym(112328528, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/112328528" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Geologica:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -734,7 +722,7 @@ body[data-tone="dawn"] { background: #faf3e6; }
 
 <footer class="site-footer">
   <div class="footer-inner">
-    <div class="footer-legal">ИП Гладько Инна Валерьевна · ИНН: 241104537970 · ОГРНИП: 325246800094256</div>
+    <div class="footer-legal">ИП Гладько Инна Валерьевна · ИНН: 241104537970 · ОГРНИП: 325246800094256 · <a href="https://bodycodelab.github.io/son/politika.html">Политика конфиденциальности</a> · <a href="#" onclick="bclCookieSettings();return false">Настройки cookie</a></div>
     <div class="footer-contact">Курс не заменяет врача при клинических нарушениях сна и не обещает результат в конкретные сроки</div>
     <div class="footer-contact">Поддержка: Telegram <a href="https://t.me/bodycodelab_support" style="color:inherit">@bodycodelab_support</a></div>
   </div>
@@ -873,6 +861,54 @@ if(!reduceMotion && 'IntersectionObserver' in window){
     url.searchParams.set('order_id', tgId);
     link.href = url.toString();
   });
+})();
+</script>
+<!-- Согласие на cookie: Метрика только после «Принять» (152-ФЗ). Политика: https://bodycodelab.github.io/son/politika.html -->
+<style>
+#bcl-cc{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:2147483000;max-width:520px;margin:0 auto;padding:8px 8px 8px 14px;border-radius:12px;background:#242420;border:1px solid rgba(212,145,58,.35);color:#ece8df;font-family:inherit;font-size:12.5px;line-height:1.35;box-shadow:0 6px 20px rgba(0,0,0,.28);display:none;align-items:center;gap:8px;animation:bcl-in .25s ease-out}
+@keyframes bcl-in{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){#bcl-cc{animation:none}}
+#bcl-cc span{flex:1 1 auto;min-width:0}
+#bcl-cc a{color:#e8b870}
+#bcl-cc button{flex:0 0 auto;height:32px;padding:0 14px;border-radius:8px;font:inherit;font-weight:600;cursor:pointer}
+#bcl-cc .bcl-y{background:#d4913a;color:#fff;border:1px solid #d4913a}
+#bcl-cc .bcl-n{background:transparent;color:#ece8df;border:1px solid rgba(236,232,223,.28)}
+#bcl-cc button:focus-visible{outline:2px solid #e8b870;outline-offset:2px}
+.bcl-legal{font-size:13px;line-height:1.5;font-family:inherit;opacity:.75;text-align:center;padding:10px 16px}
+.bcl-legal a{color:inherit}
+</style>
+<div id="bcl-cc" role="dialog" aria-live="polite" aria-label="Cookie">
+<span>Сайт использует cookie и Яндекс Метрику. <a href="https://bodycodelab.github.io/son/politika.html">Подробнее</a></span>
+<button type="button" class="bcl-n" data-c="no">Отказаться</button><button type="button" class="bcl-y" data-c="yes">Принять</button>
+</div>
+<script>
+(function(){
+  var K='bcl_consent', box=document.getElementById('bcl-cc');
+  function get(){try{return localStorage.getItem(K)}catch(e){return null}}
+  function set(v){try{localStorage.setItem(K,v)}catch(e){}}
+  function metrika(){
+    if(window.__bclYm)return; window.__bclYm=1;
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();
+    for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}
+    k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+    (window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=112328528','ym');
+    ym(112328528, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
+  }
+  function afterLoad(fn){if(document.readyState==='complete'){fn()}else{window.addEventListener('load',fn)}}
+  function wipe(){
+    document.cookie.split(';').forEach(function(c){var n=c.split('=')[0].trim();
+      if(/^_ym|^yandexuid|^yabs|^i$/.test(n)){document.cookie=n+'=;Max-Age=0;path=/';document.cookie=n+'=;Max-Age=0;path=/;domain='+location.hostname;}});
+    try{Object.keys(localStorage).forEach(function(k){if(/^_ym/.test(k))localStorage.removeItem(k)})}catch(e){}
+  }
+  function show(on){box.style.display=on?'flex':'none'}
+  box.addEventListener('click',function(ev){
+    var v=ev.target&&ev.target.getAttribute('data-c'); if(!v)return;
+    var was=get(); set(v); show(false);
+    if(v==='yes'){metrika()} else {wipe(); if(was==='yes')location.reload()}
+  });
+  window.bclCookieSettings=function(){show(true)};
+  var c=get();
+  if(c==='yes'){afterLoad(metrika)} else if(c!=='no'){show(true)}
 })();
 </script>
 </body>
